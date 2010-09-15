@@ -1,6 +1,6 @@
-################################################################################
 # vim:set expandtab tabstop=4 shiftwidth=4:
 # -*- coding: utf-8 -*-
+################################################################################
 #
 # VigiConf local component
 # Copyright (C) 2010-2011 CS-SI
@@ -82,7 +82,7 @@ class ValidateConf(Command):
         output = proc.communicate()[0]
         if proc.returncode != 0:
             raise CommandExecError("Validation failed for app %s. "
-                                    % self.appname
+                                    % self.appname +
                                    "Output: %s" % output)
 
 
@@ -107,7 +107,7 @@ class ActivateConf(Command):
         os.rename(os.path.join(self.basedir, "new"),
                   os.path.join(self.basedir, "prod"))
         os.makedirs(os.path.join(self.basedir, "new"))
-        shutil.copy(os.path.join(self.basedir, "prod", "revisions.txt")
+        shutil.copy(os.path.join(self.basedir, "prod", "revisions.txt"),
                     os.path.join(self.basedir, "new", "revisions.txt"))
 
 
@@ -164,7 +164,7 @@ class ValidateConf(Command):
         output = proc.communicate()[0]
         if proc.returncode != 0:
             raise CommandExecError("Validation failed for app %s. "
-                                    % self.appname
+                                    % self.appname +
                                    "Output: %s" % output)
 
 
@@ -176,24 +176,24 @@ class StartStopApp(Command):
         super(StartStopApp, self).__init__(name=action)
 
     def get_script(self):
-        return os.path.join(settings["vigiconf"].get("targetconfdir")
+        return os.path.join(settings["vigiconf"].get("targetconfdir"),
                             "prod", self.appname, "%s.sh" % self.action)
 
     def check(self):
         if not os.path.exists(self.get_script()):
             raise CommandPrereqError("The %s script does not exist for the "
-                                        % self.get_script()
+                                        % self.get_script() +
                                      "application %s" % self.appname)
 
     def run(self):
-        self.check():
+        self.check()
         proc = subprocess.Popen([self.get_script()],
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.STDOUT)
         output = proc.communicate()[0]
         if proc.returncode != 0:
             raise CommandExecError("Action %s failed for app %s. "
-                                    % (self.action, self.appname)
+                                    % (self.action, self.appname) +
                                    "Output: %s" % output)
 
 
