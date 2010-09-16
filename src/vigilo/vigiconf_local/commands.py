@@ -50,6 +50,45 @@ class Command(object):
         raise NotImplementedError
 
 
+class ReceiveConf(Command):
+
+    def __init__(self, archive):
+        self.basedir = settings["vigiconf"].get("targetconfdir")
+        self.archive = archive
+        super(ReceiveConf, self).__init__(name="receive")
+
+    def check(self):
+        if not os.path.exists(self.archive):
+            raise CommandPrereqError("The archive '%s' does not exist, "
+                                      % self.archive +
+                                     "copy it first.")
+
+    def run(self):
+        self.check()
+        if os.path.isdir(os.path.join(self.basedir, "new")):
+            shutil.rmtree(os.path.join(self.basedir, "new"))
+        os.makedirs(os.path.join(self.basedir, "new"))
+        os.chdir(os.path.join(self.basedir, "new"))
+        command = ["tar", "-xf", self.archive]
+        if self.debug:
+            print " ".join(command)
+            return
+        proc = subprocess.Popen(command, stdout=subprocess.PIPE,
+                                         stderr=subprocess.STDOUT)
+        output = proc.communicate()[0]
+        if proc.returncode != 0:
+            os.remove(self.archive)
+            raise CommandExecError("Validation failed for app %s. "
+                                    % self.appname +
+                                   "Output: %s" % output)
+        self.chmod()
+        os.remove(self.archive)
+
+    def chmod(self):
+        subprocess.call(["chmod", "-R", "o-w",
+                         os.path.join(self.basedir, "new")])
+
+
 class ValidateConf(Command):
 
     def __init__(self, appname):
@@ -69,10 +108,10 @@ class ValidateConf(Command):
         if not self.check():
             return # pas de script de validation, on a rien à faire
         os.chdir(os.path.join(self.basedir, "new"))
-        command = [os.path.join("validation", "%s.sh" % self.appname),
-                   os.path.join(self.basedir, "new")]
+        command = ["sh", os.path.join("validation", "%s.sh" % self.appname),
+                         os.path.join(self.basedir, "new")]
         if self.debug:
-            print command
+            print " ".join(command)
             return
         proc = subprocess.Popen(command, stdout=subprocess.PIPE,
                                          stderr=subprocess.STDOUT)
@@ -92,7 +131,7 @@ class ActivateConf(Command):
     def check(self):
         if not os.path.isdir(os.path.join(self.basedir, "new")):
             raise CommandPrereqError("The 'new' directory does not exist. "
-                               "Depoy the configuration first.")
+                               "Deploy the configuration first.")
 
     def run(self):
         self.check()
@@ -204,5 +243,6 @@ COMMANDS = {
         "start-app": StartApp,
         "validate-app": ValidateConf,
         "activate-conf": ActivateConf,
+        "receive-conf": ReceiveConf,
 #        "revert-conf": RevertConf,
 }
