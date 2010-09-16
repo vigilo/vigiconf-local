@@ -62,7 +62,7 @@ class ValidateConf(Command):
     def __init__(self, appname):
         self.basedir = settings["vigiconf"].get("targetconfdir")
         self.appname = appname
-        super(ValidateConf, self).__init__(name="validate", args=args)
+        super(ValidateConf, self).__init__(name="validate")
 
     def check(self):
         if not self.appname:
@@ -158,7 +158,8 @@ class StartStopApp(Command):
 
     def get_script(self):
         return os.path.join(settings["vigiconf"].get("targetconfdir"),
-                            "prod", self.appname, "%s.sh" % self.action)
+                            "prod", "vigiconf-local", self.appname,
+                            "%s.sh" % self.action)
 
     def check(self):
         if not os.path.exists(self.get_script()):
@@ -169,9 +170,9 @@ class StartStopApp(Command):
     def run(self):
         self.check()
         if self.debug:
-            print self.get_script()
+            print "sh %s" % self.get_script()
             return
-        proc = subprocess.Popen([self.get_script()],
+        proc = subprocess.Popen(["sh", self.get_script()],
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.STDOUT)
         output = proc.communicate()[0]
