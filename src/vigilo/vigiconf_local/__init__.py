@@ -62,6 +62,9 @@ def main():
     except CommandPrereqError, e:
         print >>sys.stderr, "Setup error: %s" % e
         sys.exit(11)
+    except CommandExecError, e:
+        print >>sys.stderr, "Error: %s" % e
+        sys.exit(10)
 
 
 if __name__ == "__main__":

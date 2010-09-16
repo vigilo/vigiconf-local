@@ -27,8 +27,6 @@ import os
 import shutil
 import subprocess
 
-from pkg_resources import working_set
-
 from vigilo.common.conf import settings
 settings.load_module(__name__)
 
@@ -44,17 +42,12 @@ class CommandPrereqError(CommandError):
 class Command(object):
 
 
-    def __init__(self, name, args=[]):
+    def __init__(self, name):
         self.name = name
-        self.args = args
         self.debug = False
 
     def run(self):
         raise NotImplementedError
-
-
-class ShellCommand(Command):
-    pass
 
 
 class ValidateConf(Command):
@@ -109,44 +102,58 @@ class ActivateConf(Command):
             return
         if not os.path.isdir(os.path.join(self.basedir, "prod")):
             os.makedirs(os.path.join(self.basedir, "prod"))
-        shutil.rmtree(os.path.join(self.basedir, "old"))
-        os.rename(os.path.join(self.basedir, "prod"),
-                  os.path.join(self.basedir, "old"))
-        os.rename(os.path.join(self.basedir, "new"),
-                  os.path.join(self.basedir, "prod"))
-        os.makedirs(os.path.join(self.basedir, "new"))
-        shutil.copy(os.path.join(self.basedir, "prod", "revisions.txt"),
-                    os.path.join(self.basedir, "new", "revisions.txt"))
+        try:
+            shutil.rmtree(os.path.join(self.basedir, "old"))
+            os.rename(os.path.join(self.basedir, "prod"),
+                      os.path.join(self.basedir, "old"))
+            os.rename(os.path.join(self.basedir, "new"),
+                      os.path.join(self.basedir, "prod"))
+            os.makedirs(os.path.join(self.basedir, "new"))
+            shutil.copy(os.path.join(self.basedir, "prod", "revisions.txt"),
+                        os.path.join(self.basedir, "new", "revisions.txt"))
+        except OSError, e:
+            msg = "Configuration activation failed: %s." % e
+            if not os.access(self.basedir, os.W_OK):
+                msg += " The '%s' user must have write access to '%s'." \
+                        % (os.getlogin(), self.basedir)
+            raise CommandExecError(msg)
 
 
-class RevertConf(Command):
-
-    def __init__(self):
-        self.basedir = settings["vigiconf"].get("targetconfdir")
-        super(RevertConf, self).__init__(name="revert")
-
-    def check(self):
-        if os.path.isdir(os.path.join(self.basedir, "undo-tmp")):
-            raise CommandPrereqError("The 'undo-tmp' directory exists. "
-                               "It looks like a previous undo failed.")
-        if not os.path.isdir(os.path.join(self.basedir, "old")):
-            raise CommandPrereqError("The 'old' directory does not exist, "
-                               "can't revert to the previous config.")
-        if not os.path.isdir(os.path.join(self.basedir, "prod")):
-            raise CommandPrereqError("The 'prod' directory does not exist, "
-                               "can't revert to the previous config.")
-
-    def run(self):
-        self.check()
-        if self.debug:
-            print "switching directories 'prod' and 'old'"
-            return
-        os.rename(os.path.join(self.basedir, "old"),
-                  os.path.join(self.basedir, "undo-tmp"))
-        os.rename(os.path.join(self.basedir, "prod"),
-                  os.path.join(self.basedir, "old"))
-        os.rename(os.path.join(self.basedir, "undo-tmp"),
-                  os.path.join(self.basedir, "prod"))
+#class RevertConf(Command):
+#
+#    def __init__(self):
+#        self.basedir = settings["vigiconf"].get("targetconfdir")
+#        super(RevertConf, self).__init__(name="revert")
+#
+#    def check(self):
+#        if os.path.isdir(os.path.join(self.basedir, "undo-tmp")):
+#            raise CommandPrereqError("The 'undo-tmp' directory exists. "
+#                               "It looks like a previous undo failed.")
+#        if not os.path.isdir(os.path.join(self.basedir, "old")):
+#            raise CommandPrereqError("The 'old' directory does not exist, "
+#                               "can't revert to the previous config.")
+#        if not os.path.isdir(os.path.join(self.basedir, "prod")):
+#            raise CommandPrereqError("The 'prod' directory does not exist, "
+#                               "can't revert to the previous config.")
+#
+#    def run(self):
+#        self.check()
+#        if self.debug:
+#            print "switching directories 'prod' and 'old'"
+#            return
+#        try:
+#            os.rename(os.path.join(self.basedir, "old"),
+#                      os.path.join(self.basedir, "undo-tmp"))
+#            os.rename(os.path.join(self.basedir, "prod"),
+#                      os.path.join(self.basedir, "old"))
+#            os.rename(os.path.join(self.basedir, "undo-tmp"),
+#                      os.path.join(self.basedir, "prod"))
+#        except OSError, e:
+#            msg = "Configuration rollback failed: %s." % e
+#            if not os.access(self.basedir, os.W_OK):
+#                msg += " The '%s' user must have write access to '%s'." \
+#                        % (os.getlogin(), self.basedir)
+#            raise CommandExecError(msg)
 
 
 class StartStopApp(Command):
@@ -197,5 +204,5 @@ COMMANDS = {
         "start-app": StartApp,
         "validate-app": ValidateConf,
         "activate-conf": ActivateConf,
-        "revert-conf": RevertConf,
+#        "revert-conf": RevertConf,
 }
