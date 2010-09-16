@@ -23,6 +23,7 @@
 Commandes autorisées
 """
 
+import os
 import shutil
 import subprocess
 
@@ -136,36 +137,6 @@ class RevertConf(Command):
                   os.path.join(self.basedir, "old"))
         os.rename(os.path.join(self.basedir, "undo-tmp"),
                   os.path.join(self.basedir, "prod"))
-
-
-class ValidateConf(Command):
-
-    def __init__(self, appname=None):
-        self.basedir = settings["vigiconf"].get("targetconfdir")
-        self.appname = appname
-        super(ValidateConf, self).__init__(name="validate")
-
-    def check(self):
-        if not self.appname:
-            raise CommandPrereqError("Please specify an app name to validate")
-        if not os.path.exists(os.path.join(
-                    self.basedir, "validation", "%s.sh" % self.appname)):
-            return False
-        return True
-
-    def run(self):
-        if not self.check():
-            return # pas de script de validation, on a rien à faire
-        os.chdir(os.path.join(self.basedir, "new"))
-        command = [os.path.join("validation", "%s.sh" % self.appname),
-                   os.path.join(self.basedir, "new")]
-        proc = subprocess.Popen(command, stdout=subprocess.PIPE,
-                                         stderr=subprocess.STDOUT)
-        output = proc.communicate()[0]
-        if proc.returncode != 0:
-            raise CommandExecError("Validation failed for app %s. "
-                                    % self.appname +
-                                   "Output: %s" % output)
 
 
 class StartStopApp(Command):
