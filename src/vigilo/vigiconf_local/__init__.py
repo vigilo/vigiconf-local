@@ -26,9 +26,12 @@ Il est installé sur les serveur de supervision qui sont téléadministrés par
 VigiConf
 """
 
+import sys
 import optparse
+import inspect
 
-from vigilo.vigiconf_local.commands import COMMANDS
+from vigilo.vigiconf_local.commands import \
+        COMMANDS, CommandPrereqError, CommandExecError
 
 def main():
     parser = optparse.OptionParser("Usage: %prog [options] command [arguments]")
@@ -44,12 +47,21 @@ def main():
         parser.error("Unknown command. Available commands: %s"
                      % ", ".join(COMMANDS.keys()))
 
-    cmd = COMMANDS[cmd_name](args[1:])
+    cmd_args = inspect.getargspec(COMMANDS[cmd_name].__init__)[0]
+
+    if len(args) != len(cmd_args):
+        parser.error("%d argument(s) required: %s" % (len(cmd_args) - 1, ", ".join(cmd_args[1:])))
+
+    cmd = COMMANDS[cmd_name](*args[1:])
 
     if opts.dryrun:
         cmd.debug = True
 
-    cmd.run()
+    try:
+        cmd.run()
+    except CommandPrereqError, e:
+        print >>sys.stderr, "Setup error: %s" % e
+        sys.exit(11)
 
 
 if __name__ == "__main__":

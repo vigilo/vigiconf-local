@@ -43,11 +43,11 @@ class CommandPrereqError(CommandError):
 
 class Command(object):
 
-    runas = None
 
-    def __init__(self, name=None, args=[]):
+    def __init__(self, name, args=[]):
         self.name = name
         self.args = args
+        self.debug = False
 
     def run(self):
         raise NotImplementedError
@@ -59,10 +59,10 @@ class ShellCommand(Command):
 
 class ValidateConf(Command):
 
-    def __init__(self, appname=None):
+    def __init__(self, appname):
         self.basedir = settings["vigiconf"].get("targetconfdir")
         self.appname = appname
-        super(ValidateConf, self).__init__(name="validate")
+        super(ValidateConf, self).__init__(name="validate", args=args)
 
     def check(self):
         if not self.appname:
@@ -78,6 +78,9 @@ class ValidateConf(Command):
         os.chdir(os.path.join(self.basedir, "new"))
         command = [os.path.join("validation", "%s.sh" % self.appname),
                    os.path.join(self.basedir, "new")]
+        if self.debug:
+            print command
+            return
         proc = subprocess.Popen(command, stdout=subprocess.PIPE,
                                          stderr=subprocess.STDOUT)
         output = proc.communicate()[0]
@@ -100,6 +103,10 @@ class ActivateConf(Command):
 
     def run(self):
         self.check()
+        if self.debug:
+            print "backuping directory 'prod' to 'old', " \
+                 +"and renaming 'new' to 'prod'"
+            return
         if not os.path.isdir(os.path.join(self.basedir, "prod")):
             os.makedirs(os.path.join(self.basedir, "prod"))
         shutil.rmtree(os.path.join(self.basedir, "old"))
@@ -131,6 +138,9 @@ class RevertConf(Command):
 
     def run(self):
         self.check()
+        if self.debug:
+            print "switching directories 'prod' and 'old'"
+            return
         os.rename(os.path.join(self.basedir, "old"),
                   os.path.join(self.basedir, "undo-tmp"))
         os.rename(os.path.join(self.basedir, "prod"),
@@ -141,7 +151,7 @@ class RevertConf(Command):
 
 class StartStopApp(Command):
 
-    def __init__(self, appname=None, action=None):
+    def __init__(self, appname, action):
         self.appname = appname
         self.action = action
         super(StartStopApp, self).__init__(name=action)
@@ -158,6 +168,9 @@ class StartStopApp(Command):
 
     def run(self):
         self.check()
+        if self.debug:
+            print self.get_script()
+            return
         proc = subprocess.Popen([self.get_script()],
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.STDOUT)
@@ -169,11 +182,11 @@ class StartStopApp(Command):
 
 
 class StartApp(StartStopApp):
-    def __init__(self, appname=None):
+    def __init__(self, appname):
         super(StartApp, self).__init__(appname=appname, action="start")
 
 class StopApp(StartStopApp):
-    def __init__(self, appname=None):
+    def __init__(self, appname):
         super(StopApp, self).__init__(appname=appname, action="stop")
 
 
