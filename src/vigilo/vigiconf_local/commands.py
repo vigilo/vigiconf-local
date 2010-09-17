@@ -28,7 +28,10 @@ import shutil
 import subprocess
 
 from vigilo.common.conf import settings
-settings.load_module(__name__)
+try:
+    settings.load_module("vigilo.vigiconf")
+except IOError:
+    settings.load_module("vigilo.vigiconf", "settings-local.ini")
 
 
 class CommandError(Exception):

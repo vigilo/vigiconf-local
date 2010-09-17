@@ -5,6 +5,7 @@ from glob import glob
 from setuptools import setup, find_packages
 
 sysconfdir = os.getenv("SYSCONFDIR", "/etc")
+localstatedir = os.getenv("LOCALSTATEDIR", "/var")
 
 tests_require = [
     'nose',
@@ -12,22 +13,11 @@ tests_require = [
 ]
 
 def get_data_files():
-    files = find_data_files(
-                os.path.join(sysconfdir, "vigilo/vigiconf/conf.d.example"),
-                "src/vigilo/vigiconf/conf.d")
-    # filter those out
-    files = [f for f in files if f[0] != "/etc/vigilo/vigiconf/conf.d.example/"]
-    # others
-    for d in ["conf.d", "new", "prod"]:
-        files.append( (os.path.join(sysconfdir, "vigilo/vigiconf", d), []) )
-    files.append( (os.path.join(sysconfdir, "vigilo/vigiconf"),
-                ["settings.ini", "src/vigilo/vigiconf/conf.d/README.source"]) )
-    files.append((os.path.join(sysconfdir, "vigilo/vigiconf/ssh"), ["pkg/ssh_config"]))
-    files.append(("/etc/cron.d", ["pkg/vigilo-vigiconf.cron"]))
-    files.append((os.path.join(localstatedir, "lib/vigilo/vigiconf/deploy"), []))
-    files.append((os.path.join(localstatedir, "lib/vigilo/vigiconf/revisions"), []))
-    files.append((os.path.join(localstatedir, "lib/vigilo/vigiconf/tmp"), []))
-    files.append((os.path.join(localstatedir, "lock/vigilo-vigiconf"), []))
+    files = []
+    for d in ["new", "prod", "tmp"]:
+        files.append((os.path.join(sysconfdir, "vigilo/vigiconf", d), []))
+    files.append((os.path.join(sysconfdir, "vigilo/vigiconf"), ["settings-local.ini"]))
+    files.append((os.path.join(localstatedir, "lib/vigilo/vigiconf"), []))
     return files
 
 
@@ -58,5 +48,6 @@ setup(name='vigilo-vigiconf-local',
                 ],
             },
         package_dir={'': 'src'},
+        data_files=get_data_files(),
         )
 
