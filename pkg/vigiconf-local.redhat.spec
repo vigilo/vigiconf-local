@@ -56,7 +56,7 @@ grep -v '^%{_sysconfdir}' INSTALLED_FILES \
 	> INSTALLED_FILES.filtered
 mv -f INSTALLED_FILES.filtered INSTALLED_FILES
 
-%find_lang %{name}
+#%find_lang %{name}
 
 %pre
 getent group vigiconf >/dev/null || groupadd -r vigiconf

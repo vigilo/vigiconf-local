@@ -50,7 +50,7 @@ grep -v '^%{_sysconfdir}' INSTALLED_FILES \
 	> INSTALLED_FILES.filtered
 mv -f INSTALLED_FILES.filtered INSTALLED_FILES
 
-%find_lang %{name}
+#%find_lang %{name}
 
 %pre
 %_pre_useradd vigiconf %{_localstatedir}/lib/vigilo/vigiconf /bin/bash
