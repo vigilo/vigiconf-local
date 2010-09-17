@@ -16,12 +16,16 @@ install: settings-local.ini
 	$(PYTHON) setup.py install --single-version-externally-managed --root=$(DESTDIR) --record=INSTALLED_FILES
 
 install_users:
-	@echo "Creating the $(NAME) user..."
-	-groupadd $(NAME)
-	-useradd -s /bin/bash -M -d $(VARDIR) -g $(NAME) -c 'Vigilo VigiConf user' $(NAME)
+	@echo "Creating the vigiconf user..."
+	-groupadd vigiconf
+	-useradd -s /bin/bash -M -d $(VARDIR) -g vigiconf -c 'Vigilo VigiConf user' vigiconf && dd if=/dev/random bs=1 count=12 2>/dev/null | base64 - | passwd --stdin vigiconf
+	# unlock the account
+	if [ `passwd -S vigiconf | cut -d" " -f2` == LK ]; then \
+    	dd if=/dev/random bs=1 count=12 2>/dev/null | base64 - | passwd --stdin vigiconf ;\
+	fi
 
 install_permissions:
-	chown -R $(NAME):$(NAME) $(DESTDIR)$(VARDIR)
+	chown -R vigiconf:vigiconf $(DESTDIR)$(VARDIR)
 
 lint: lint_pylint
 #tests: tests_nose

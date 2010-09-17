@@ -61,7 +61,11 @@ mv -f INSTALLED_FILES.filtered INSTALLED_FILES
 %pre
 getent group vigiconf >/dev/null || groupadd -r vigiconf
 getent passwd vigiconf >/dev/null || \
-	useradd -r -g vigiconf -d %{_localstatedir}/lib/vigilo/vigiconf -s /bin/bash vigiconf
+    useradd -r -g vigiconf -d %{_localstatedir}/lib/vigilo/vigiconf -s /bin/bash vigiconf
+# unlock the account
+if [ `passwd -S vigiconf | cut -d" " -f2` == LK ]; then
+    dd if=/dev/random bs=1 count=12 2>/dev/null | base64 - | passwd --stdin vigiconf
+fi
 exit 0
 
 
