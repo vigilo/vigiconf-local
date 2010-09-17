@@ -50,7 +50,6 @@ grep -v '^%{_sysconfdir}' INSTALLED_FILES \
 	> INSTALLED_FILES.filtered
 mv -f INSTALLED_FILES.filtered INSTALLED_FILES
 
-#%find_lang %{name}
 
 %pre
 %_pre_useradd vigiconf %{_localstatedir}/lib/vigilo/vigiconf /bin/bash
@@ -64,7 +63,7 @@ exit 0
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files -f %{name}.lang
+%files
 %defattr(-,root,root)
 %doc COPYING
 %dir %{_sysconfdir}/vigilo
