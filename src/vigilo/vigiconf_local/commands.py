@@ -103,7 +103,7 @@ class ValidateConf(Command):
         if not self.appname:
             raise CommandPrereqError("Please specify an app name to validate")
         if not os.path.exists(os.path.join(
-                    self.basedir, "validation", "%s.sh" % self.appname)):
+                    self.basedir, "apps", self.appname, "validation.sh")):
             return False
         return True
 
@@ -111,7 +111,7 @@ class ValidateConf(Command):
         if not self.check():
             return # pas de script de validation, on a rien à faire
         os.chdir(os.path.join(self.basedir, "new"))
-        command = ["sh", os.path.join("validation", "%s.sh" % self.appname),
+        command = ["sh", os.path.join("apps", self.appname, "validation.sh"),
                          os.path.join(self.basedir, "new")]
         if self.debug:
             print " ".join(command)
@@ -207,7 +207,7 @@ class StartStopApp(Command):
 
     def get_script(self):
         return os.path.join(settings["vigiconf"].get("targetconfdir"),
-                            "prod", "vigiconf-local", self.appname,
+                            "prod", "apps", self.appname,
                             "%s.sh" % self.action)
 
     def check(self):
