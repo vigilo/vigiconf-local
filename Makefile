@@ -14,6 +14,7 @@ settings-local.ini: settings-local.ini.in
 
 install: settings-local.ini
 	$(PYTHON) setup.py install --single-version-externally-managed --root=$(DESTDIR) --record=INSTALLED_FILES
+	chmod a+rX -R $(DESTDIR)$(PREFIX)/lib*/python*/*
 
 install_users:
 	@echo "Creating the vigiconf user..."
