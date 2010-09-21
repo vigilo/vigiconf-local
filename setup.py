@@ -14,7 +14,7 @@ tests_require = [
 
 def get_data_files():
     files = []
-    for d in ["new", "prod", "tmp"]:
+    for d in ["new", "prod", "tmp", "old"]:
         files.append((os.path.join(sysconfdir, "vigilo/vigiconf", d), []))
     files.append((os.path.join(sysconfdir, "vigilo/vigiconf"), ["settings-local.ini"]))
     files.append((os.path.join(localstatedir, "lib/vigilo/vigiconf"), []))
