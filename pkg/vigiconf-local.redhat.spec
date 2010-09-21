@@ -72,7 +72,7 @@ exit 0
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(-,root,root)
+%defattr(644,root,root,755)
 %doc COPYING
 %dir %{_sysconfdir}/vigilo
 %dir %attr(-,vigiconf,vigiconf) %{_sysconfdir}/vigilo/vigiconf/
