@@ -73,7 +73,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %attr(-,vigiconf,vigiconf) %{_sysconfdir}/vigilo/vigiconf/prod
 %dir %attr(-,vigiconf,vigiconf) %{_sysconfdir}/vigilo/vigiconf/tmp
 %dir %attr(-,vigiconf,vigiconf) %{_sysconfdir}/vigilo/vigiconf/old
-%{_bindir}/*
+%attr(755,root,root) %{_bindir}/*
 %{python_sitelib}/*
 %dir %{_localstatedir}/lib/vigilo
 %attr(-,vigiconf,vigiconf) %{_localstatedir}/lib/vigilo/vigiconf
