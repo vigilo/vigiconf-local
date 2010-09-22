@@ -19,10 +19,10 @@ install: settings-local.ini
 install_users:
 	@echo "Creating the vigiconf user..."
 	-groupadd vigiconf
-	-useradd -s /bin/bash -M -d $(VARDIR) -g vigiconf -c 'Vigilo VigiConf user' vigiconf && dd if=/dev/random bs=1 count=12 2>/dev/null | base64 - | passwd --stdin vigiconf
-	# unlock the account
+	-useradd -s /bin/bash -M -d $(VARDIR) -g vigiconf -c 'Vigilo VigiConf user' vigiconf
+	# unlock the account if necessary
 	if [ `passwd -S vigiconf | cut -d" " -f2` == LK ]; then \
-    	dd if=/dev/random bs=1 count=12 2>/dev/null | base64 - | passwd --stdin vigiconf ;\
+		dd if=/dev/random bs=1 count=12 2>/dev/null | base64 - | passwd --stdin vigiconf ;\
 	fi
 
 install_permissions:
