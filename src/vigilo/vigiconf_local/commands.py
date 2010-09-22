@@ -240,6 +240,35 @@ class StopApp(StartStopApp):
         super(StopApp, self).__init__(appname=appname, action="stop")
 
 
+class GetRevisions(Command):
+
+    def __init__(self):
+        self.basedir = settings["vigiconf"].get("targetconfdir")
+        self.dirs = ["new", "prod", "old"]
+        super(GetRevisions, self).__init__(name="get-revisions")
+
+    def check(self):
+        for d in self.dirs:
+            if not os.path.isdir(os.path.join(self.basedir, d)):
+                raise CommandPrereqError(
+                        "The '%s' directory does not exist." % d)
+
+    def run(self):
+        self.check()
+        if self.debug:
+            print "Getting revisions in directories %s" % ", ".join(self.dirs)
+            return
+        for d in self.dirs:
+            revision_file = os.path.join(self.basedir, d, "revisions.txt")
+            if os.path.exists(revision_file):
+                rev_file = open(revision_file)
+                rev = rev_file.read().strip()
+                rev_file.close()
+            else:
+                rev = 0
+            print "%s %s" % (d, rev)
+
+
 
 COMMANDS = {
         "stop-app": StopApp,
@@ -247,5 +276,6 @@ COMMANDS = {
         "validate-app": ValidateConf,
         "activate-conf": ActivateConf,
         "receive-conf": ReceiveConf,
+        "get-revisions": GetRevisions,
 #        "revert-conf": RevertConf,
 }
