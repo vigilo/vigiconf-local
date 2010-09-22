@@ -262,7 +262,7 @@ class GetRevisions(Command):
             revision_file = os.path.join(self.basedir, d, "revisions.txt")
             if os.path.exists(revision_file):
                 rev_file = open(revision_file)
-                rev = rev_file.read().strip()
+                rev = rev_file.read().strip().split(" ")[1]
                 rev_file.close()
             else:
                 rev = 0
