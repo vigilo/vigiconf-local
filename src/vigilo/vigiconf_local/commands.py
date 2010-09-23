@@ -201,14 +201,15 @@ class ActivateConf(Command):
 
 class StartStopApp(Command):
 
-    def __init__(self, appname, action):
+    def __init__(self, appname, action, subdir):
         self.appname = appname
         self.action = action
+        self.subdir = subdir
         super(StartStopApp, self).__init__(name=action)
 
     def get_script(self):
         return os.path.join(settings["vigiconf"].get("targetconfdir"),
-                            "prod", "apps", self.appname,
+                            self.subdir, "apps", self.appname,
                             "%s.sh" % self.action)
 
     def check(self):
@@ -234,11 +235,17 @@ class StartStopApp(Command):
 
 class StartApp(StartStopApp):
     def __init__(self, appname):
-        super(StartApp, self).__init__(appname=appname, action="start")
+        super(StartApp, self).__init__(appname=appname, action="start", subdir="prod")
 
 class StopApp(StartStopApp):
     def __init__(self, appname):
-        super(StopApp, self).__init__(appname=appname, action="stop")
+        # subdir=new, parce que le process est :
+        # 1. déploiement dans new
+        # 2. arrêt des services
+        # 3. new -> prod
+        # 4. démarrage des services
+        # donc la première fois, le dossier prod est vide quand on arrête les services
+        super(StopApp, self).__init__(appname=appname, action="stop", subdir="new")
 
 
 class GetRevisions(Command):
