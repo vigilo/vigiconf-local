@@ -93,11 +93,26 @@ class ReceiveConf(Command):
 
 
 class ValidateConf(Command):
+    """
+    Validation de la configuration
 
-    def __init__(self, appname):
-        self.basedir = settings["vigiconf"].get("targetconfdir")
+    @ivar location: C{local} si la validation est faite sur le serveur de
+        destination, et C{central} si la validation est faite sur le serveur
+        VigiConf.
+    @type location: C{local} ou C{central}
+    """
+
+    def __init__(self, appname, basedir=None):
         self.appname = appname
-        self.valid_script = os.path.join(self.basedir, "new", "apps",
+        self.basedir = basedir
+        targetconfdir = settings["vigiconf"].get("targetconfdir")
+        if self.basedir is None:
+            self.basedir = os.path.join(targetconfdir, "new")
+        if self.basedir.startswith(targetconfdir):
+            self.location = "local"
+        else:
+            self.location = "central"
+        self.valid_script = os.path.join(self.basedir, "apps",
                                          self.appname, "validation.sh")
         super(ValidateConf, self).__init__(name="validate")
 
@@ -112,8 +127,8 @@ class ValidateConf(Command):
     def run(self):
         if not self.check():
             return # pas de script de validation, on a rien à faire
-        os.chdir(os.path.join(self.basedir, "new"))
-        command = ["sh", self.valid_script, os.path.join(self.basedir, "new")]
+        os.chdir(self.basedir)
+        command = ["sh", self.valid_script, self.basedir, self.location]
         if self.debug:
             print " ".join(command)
             return
@@ -160,43 +175,6 @@ class ActivateConf(Command):
                 msg += " The '%s' user must have write access to '%s'." \
                         % (os.getlogin(), self.basedir)
             raise CommandExecError(msg)
-
-
-#class RevertConf(Command):
-#
-#    def __init__(self):
-#        self.basedir = settings["vigiconf"].get("targetconfdir")
-#        super(RevertConf, self).__init__(name="revert")
-#
-#    def check(self):
-#        if os.path.isdir(os.path.join(self.basedir, "undo-tmp")):
-#            raise CommandPrereqError("The 'undo-tmp' directory exists. "
-#                               "It looks like a previous undo failed.")
-#        if not os.path.isdir(os.path.join(self.basedir, "old")):
-#            raise CommandPrereqError("The 'old' directory does not exist, "
-#                               "can't revert to the previous config.")
-#        if not os.path.isdir(os.path.join(self.basedir, "prod")):
-#            raise CommandPrereqError("The 'prod' directory does not exist, "
-#                               "can't revert to the previous config.")
-#
-#    def run(self):
-#        self.check()
-#        if self.debug:
-#            print "switching directories 'prod' and 'old'"
-#            return
-#        try:
-#            os.rename(os.path.join(self.basedir, "old"),
-#                      os.path.join(self.basedir, "undo-tmp"))
-#            os.rename(os.path.join(self.basedir, "prod"),
-#                      os.path.join(self.basedir, "old"))
-#            os.rename(os.path.join(self.basedir, "undo-tmp"),
-#                      os.path.join(self.basedir, "prod"))
-#        except OSError, e:
-#            msg = "Configuration rollback failed: %s." % e
-#            if not os.access(self.basedir, os.W_OK):
-#                msg += " The '%s' user must have write access to '%s'." \
-#                        % (os.getlogin(), self.basedir)
-#            raise CommandExecError(msg)
 
 
 class StartStopApp(Command):

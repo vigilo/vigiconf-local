@@ -47,10 +47,11 @@ def main():
         parser.error("Unknown command. Available commands: %s"
                      % ", ".join(COMMANDS.keys()))
 
-    cmd_args = inspect.getargspec(COMMANDS[cmd_name].__init__)[0]
+    cmd_args = inspect.getargspec(COMMANDS[cmd_name].__init__)
 
-    if len(args) != len(cmd_args):
-        parser.error("%d argument(s) required: %s" % (len(cmd_args) - 1, ", ".join(cmd_args[1:])))
+    if len(args) != len(cmd_args[0]) - len(cmd_args[3]):
+        parser.error("%d argument(s) required: %s" %
+                     (len(cmd_args[0]) - 1, ", ".join(cmd_args[0][1:])))
 
     cmd = COMMANDS[cmd_name](*args[1:])
 
