@@ -253,7 +253,6 @@ class GetRevisions(Command):
                     rev = 0
                 else:
                     rev = rev.split(" ")[1]
-                rev = rev_file.read().strip().split(" ")[1]
                 rev_file.close()
             else:
                 rev = 0
