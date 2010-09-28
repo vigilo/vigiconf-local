@@ -48,10 +48,18 @@ def main():
                      % ", ".join(COMMANDS.keys()))
 
     cmd_args = inspect.getargspec(COMMANDS[cmd_name].__init__)
+    cmd_min_args = len(cmd_args[0]) - 1
+    if cmd_args[3]:
+        cmd_min_args -= len(cmd_args[3])
 
-    if len(args) != len(cmd_args[0]) - len(cmd_args[3]):
-        parser.error("%d argument(s) required: %s" %
-                     (len(cmd_args[0]) - 1, ", ".join(cmd_args[0][1:])))
+    if len(args) < cmd_min_args or len(args) > len(cmd_args[0]):
+        args_list = []
+        for index, arg in enumerate(cmd_args[0][1:]):
+            if index + 1 > cmd_min_args:
+                arg = "[%s]" % arg
+            args_list.append(arg)
+        parser.error("wrong number of arguments. Expected: %s" %
+                     (" ".join(args_list)))
 
     cmd = COMMANDS[cmd_name](*args[1:])
 
