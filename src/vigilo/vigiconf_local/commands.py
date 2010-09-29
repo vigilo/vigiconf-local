@@ -26,6 +26,7 @@ Commandes autorisées
 import os
 import shutil
 import subprocess
+import re
 
 from vigilo.common.conf import settings
 try:
@@ -244,16 +245,18 @@ class GetRevisions(Command):
         if self.debug:
             print "Getting revisions in directories %s" % ", ".join(self.dirs)
             return
+        rev_re = re.compile("^\s*Revision: (\d+)\s*$")
         for d in self.dirs:
             revision_file = os.path.join(self.basedir, d, "revisions.txt")
             if os.path.exists(revision_file):
                 rev_file = open(revision_file)
                 rev = rev_file.read().strip()
-                if not rev:
+                rev_file.close()
+                rev_match = rev_re.match(rev)
+                if not rev_match:
                     rev = 0
                 else:
-                    rev = rev.split(" ")[1]
-                rev_file.close()
+                    rev = rev_match.group(1)
             else:
                 rev = 0
             print "%s %s" % (d, rev)
