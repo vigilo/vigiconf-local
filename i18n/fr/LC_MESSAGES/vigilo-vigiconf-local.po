@@ -1,0 +1,118 @@
+# French translations for vigilo-vigiconf-local.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the
+# vigilo-vigiconf-local
+# project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: vigilo-vigiconf-local 2.0.0\n"
+"Report-Msgid-Bugs-To: contact@projet-vigilo.org\n"
+"POT-Creation-Date: 2010-09-30 15:29+0200\n"
+"PO-Revision-Date: 2010-09-30 16:55+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.4\n"
+
+#: src/vigilo/vigiconf_local/__init__.py:41
+msgid "Usage: %prog [options] command [arguments]"
+msgstr "%prog [options] commande [arguments]"
+
+#: src/vigilo/vigiconf_local/__init__.py:43
+msgid "Only print the command that would be run"
+msgstr "Afficher les commandes qui seraient exécutées, sans les exécuter"
+
+#: src/vigilo/vigiconf_local/__init__.py:46
+#, python-format
+msgid "No command selected. Available commands: %s"
+msgstr "Pas de commande sélectionnée. Commandes disponibles : %s"
+
+#: src/vigilo/vigiconf_local/__init__.py:51
+#, python-format
+msgid "Unknown command. Available commands: %s"
+msgstr "Commande inconnue. Commandes disponibles : %s"
+
+#: src/vigilo/vigiconf_local/__init__.py:65
+#, python-format
+msgid "Wrong number of arguments. Expected: %s"
+msgstr "Nombre d'arguments incorrect. Attendu : %s"
+
+#: src/vigilo/vigiconf_local/__init__.py:76
+#, python-format
+msgid "Setup error: %s"
+msgstr "Erreur d'installation : %s"
+
+#: src/vigilo/vigiconf_local/__init__.py:79
+#, python-format
+msgid "Error: %s"
+msgstr "Erreur : %s"
+
+#: src/vigilo/vigiconf_local/commands.py:67
+#, python-format
+msgid "The archive '%s' does not exist, copy it first"
+msgstr "L'archive '%s' n'existe pas, copiez la d'abord"
+
+#: src/vigilo/vigiconf_local/commands.py:85
+#: src/vigilo/vigiconf_local/commands.py:143
+#, python-format
+msgid "Validation failed for application '%(app)s'. Output: %(output)s"
+msgstr "Échec de la validation de l'application '%(app)s'. Sortie : %(output)s"
+
+#: src/vigilo/vigiconf_local/commands.py:124
+msgid "Please specify an application name to validate"
+msgstr "Veuillez indiquer le nom de l'application à valider"
+
+#: src/vigilo/vigiconf_local/commands.py:127
+#, python-format
+msgid "No validation script: %s"
+msgstr "Script de validation manquant : %s"
+
+#: src/vigilo/vigiconf_local/commands.py:158
+msgid "The 'new' directory does not exist. Deploy the configuration first."
+msgstr "Le dossier 'new' n'existe pas. Déployez d'abord la configuration."
+
+#: src/vigilo/vigiconf_local/commands.py:164
+msgid "Backing up the directory 'prod' to 'old', and renaming 'new' into 'prod'"
+msgstr "Sauvegarde du dossier 'prod' dans 'old' et renommage de 'new' en 'prod'"
+
+#: src/vigilo/vigiconf_local/commands.py:180
+#, python-format
+msgid ""
+"Configuration activation failed: %(error)s. User '%(user)s' must have "
+"write access to '%(dir)s'."
+msgstr ""
+"L'activation de la configuration a échoué : %(error)s. L'utilisateur "
+"'%(user)s' doit avoir les droits en écriture sur '%(dir)s'."
+
+#: src/vigilo/vigiconf_local/commands.py:188
+#, python-format
+msgid "Configuration activation failed: %s."
+msgstr "L'activation de la configuration a échoué : %s"
+
+#: src/vigilo/vigiconf_local/commands.py:207
+#, python-format
+msgid "The script '%(script)s' does not exist for application '%(app)s'"
+msgstr "Le script '%(script)s' n'existe pas pour l'application '%(app)s'"
+
+#: src/vigilo/vigiconf_local/commands.py:223
+#, python-format
+msgid "Action %(action)s failed for application %(app)s. Output: %(output)s"
+msgstr ""
+"L'action %(action)s a échoué pour l'application %(app)s. \"\n"
+"\"Sortie : %(output)s"
+
+#: src/vigilo/vigiconf_local/commands.py:258
+#, python-format
+msgid "The directory '%s' does not exist."
+msgstr "Le dossier '%s' n'existe pas."
+
+#: src/vigilo/vigiconf_local/commands.py:263
+#, python-format
+msgid "Getting revisions from these directories: %s"
+msgstr "Récupération des révisions depuis ces dossiers : %s"
+
