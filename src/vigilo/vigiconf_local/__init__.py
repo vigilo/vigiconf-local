@@ -33,19 +33,23 @@ import inspect
 from vigilo.vigiconf_local.commands import \
         COMMANDS, CommandPrereqError, CommandExecError
 
+from vigilo.common.gettext import translate
+_ = translate(__name__)
+
 def main():
-    parser = optparse.OptionParser("Usage: %prog [options] command [arguments]")
+    parser = optparse.OptionParser(
+        _("Usage: %prog [options] command [arguments]"))
     parser.add_option("-n", "--dry-run", action="store_true", dest="dryrun",
-                      help="Only print the command that would be run")
+                      help=_("Only print the command that would be run"))
     opts, args = parser.parse_args()
     if not args:
-        parser.error("No command selected. Available commands: %s"
-                     % ", ".join(COMMANDS.keys()))
+        parser.error(_("No command selected. Available commands: %s") %
+                        ", ".join(COMMANDS.keys()))
 
     cmd_name = args[0]
     if cmd_name not in COMMANDS:
-        parser.error("Unknown command. Available commands: %s"
-                     % ", ".join(COMMANDS.keys()))
+        parser.error(_("Unknown command. Available commands: %s") %
+                        ", ".join(COMMANDS.keys()))
 
     cmd_args = inspect.getargspec(COMMANDS[cmd_name].__init__)
     cmd_min_args = len(cmd_args[0]) - 1
@@ -58,8 +62,8 @@ def main():
             if index + 1 > cmd_min_args:
                 arg = "[%s]" % arg
             args_list.append(arg)
-        parser.error("wrong number of arguments. Expected: %s" %
-                     (" ".join(args_list)))
+        parser.error(_("Wrong number of arguments. Expected: %s") %
+                        " ".join(args_list))
 
     cmd = COMMANDS[cmd_name](*args[1:])
 
@@ -69,10 +73,10 @@ def main():
     try:
         cmd.run()
     except CommandPrereqError, e:
-        print >>sys.stderr, "Setup error: %s" % e
+        print >>sys.stderr, _("Setup error: %s") % e
         sys.exit(11)
     except CommandExecError, e:
-        print >>sys.stderr, "Error: %s" % e
+        print >>sys.stderr, _("Error: %s") % e
         sys.exit(10)
 
 

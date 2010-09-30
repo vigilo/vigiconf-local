@@ -28,12 +28,15 @@ import shutil
 import subprocess
 import re
 
+from vigilo.common.gettext import translate
+
 from vigilo.common.conf import settings
 try:
     settings.load_module("vigilo.vigiconf")
 except IOError:
     settings.load_module("vigilo.vigiconf", "settings-local.ini")
 
+_ = translate(__name__)
 
 class CommandError(Exception):
     pass
@@ -44,8 +47,6 @@ class CommandPrereqError(CommandError):
 
 
 class Command(object):
-
-
     def __init__(self, name):
         self.name = name
         self.debug = False
@@ -63,9 +64,8 @@ class ReceiveConf(Command):
 
     def check(self):
         if not os.path.exists(self.archive):
-            raise CommandPrereqError("The archive '%s' does not exist, "
-                                      % self.archive +
-                                     "copy it first.")
+            raise CommandPrereqError(_("The archive '%s' does not exist, "
+                                        "copy it first") % self.archive)
 
     def run(self):
         self.check()
@@ -82,9 +82,11 @@ class ReceiveConf(Command):
         output = proc.communicate()[0]
         if proc.returncode != 0:
             os.remove(self.archive)
-            raise CommandExecError("Validation failed for app %s. "
-                                    % self.appname +
-                                   "Output: %s" % output)
+            raise CommandExecError(_("Validation failed for application "
+                                    "'%(app)s'. Output: %(output)s") % {
+                                        'app': self.appname,
+                                        'output': output
+                                    })
         self.chmod()
         os.remove(self.archive)
 
@@ -119,9 +121,10 @@ class ValidateConf(Command):
 
     def check(self):
         if not self.appname:
-            raise CommandPrereqError("Please specify an app name to validate")
+            raise CommandPrereqError(_("Please specify an application "
+                                        "name to validate"))
         if not os.path.exists(self.valid_script):
-            print "No validation script: %s" % self.valid_script
+            print _("No validation script: %s") % self.valid_script
             return False
         return True
 
@@ -137,9 +140,11 @@ class ValidateConf(Command):
                                          stderr=subprocess.STDOUT)
         output = proc.communicate()[0]
         if proc.returncode != 0:
-            raise CommandExecError("Validation failed for app %s. "
-                                    % self.appname +
-                                   "Output: %s" % output)
+            raise CommandExecError(_("Validation failed for application "
+                                    "'%(app)s'. Output: %(output)s") % {
+                                        'app': self.appname,
+                                        'output': output
+                                    })
 
 
 class ActivateConf(Command):
@@ -150,14 +155,14 @@ class ActivateConf(Command):
 
     def check(self):
         if not os.path.isdir(os.path.join(self.basedir, "new")):
-            raise CommandPrereqError("The 'new' directory does not exist. "
-                               "Deploy the configuration first.")
+            raise CommandPrereqError(_("The 'new' directory does not exist. "
+                                       "Deploy the configuration first."))
 
     def run(self):
         self.check()
         if self.debug:
-            print "backuping directory 'prod' to 'old', " \
-                 +"and renaming 'new' to 'prod'"
+            print _("Backing up the directory 'prod' to 'old', "
+                    "and renaming 'new' into 'prod'")
             return
         if not os.path.isdir(os.path.join(self.basedir, "prod")):
             os.makedirs(os.path.join(self.basedir, "prod"))
@@ -171,10 +176,16 @@ class ActivateConf(Command):
             shutil.copy(os.path.join(self.basedir, "prod", "revisions.txt"),
                         os.path.join(self.basedir, "new", "revisions.txt"))
         except OSError, e:
-            msg = "Configuration activation failed: %s." % e
             if not os.access(self.basedir, os.W_OK):
-                msg += " The '%s' user must have write access to '%s'." \
-                        % (os.getlogin(), self.basedir)
+                msg = _("Configuration activation failed: %(error)s. "
+                        "User '%(user)s' must have write access "
+                        "to '%(dir)s'.") % {
+                            'error': e,
+                            'user': os.getlogin(),
+                            'dir': self.basedir,
+                        }
+            else:
+                msg = _("Configuration activation failed: %s.") % e
             raise CommandExecError(msg)
 
 
@@ -193,9 +204,11 @@ class StartStopApp(Command):
 
     def check(self):
         if not os.path.exists(self.get_script()):
-            raise CommandPrereqError("The %s script does not exist for the "
-                                        % self.get_script() +
-                                     "application %s" % self.appname)
+            raise CommandPrereqError(_("The script '%(script)s' does not "
+                                        "exist for application '%(app)s'") % {
+                                            'script': self.get_script(),
+                                            'app': self.appname,
+                                        })
 
     def run(self):
         self.check()
@@ -207,9 +220,13 @@ class StartStopApp(Command):
                                 stderr=subprocess.STDOUT)
         output = proc.communicate()[0]
         if proc.returncode != 0:
-            raise CommandExecError("Action %s failed for app %s. "
-                                    % (self.action, self.appname) +
-                                   "Output: %s" % output)
+            raise CommandExecError(_("Action %(action)s failed for "
+                                    "application %(app)s. "
+                                    "Output: %(output)s") % {
+                                        'action': self.action,
+                                        'app': self.appname,
+                                        'output': output,
+                                    })
 
 
 class StartApp(StartStopApp):
@@ -238,12 +255,13 @@ class GetRevisions(Command):
         for d in self.dirs:
             if not os.path.isdir(os.path.join(self.basedir, d)):
                 raise CommandPrereqError(
-                        "The '%s' directory does not exist." % d)
+                        _("The directory '%s' does not exist.") % d)
 
     def run(self):
         self.check()
         if self.debug:
-            print "Getting revisions in directories %s" % ", ".join(self.dirs)
+            print _("Getting revisions from these directories: %s") % \
+                    ", ".join(self.dirs)
             return
         rev_re = re.compile("^\s*Revision: (\d+)\s*$")
         for d in self.dirs:

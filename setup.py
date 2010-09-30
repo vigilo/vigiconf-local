@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 sw=4 ts=4 et :
 import os, sys
-from glob import glob
 from setuptools import setup, find_packages
 
 sysconfdir = os.getenv("SYSCONFDIR", "/etc")
@@ -11,6 +10,21 @@ tests_require = [
     'nose',
     'coverage',
 ]
+
+def install_i18n(i18ndir, destdir):
+    data_files = []
+    langs = []
+    for f in os.listdir(i18ndir):
+        if os.path.isdir(os.path.join(i18ndir, f)) and not f.startswith("."):
+            langs.append(f)
+    for lang in langs:
+        for f in os.listdir(os.path.join(i18ndir, lang, "LC_MESSAGES")):
+            if f.endswith(".mo"):
+                data_files.append(
+                        (os.path.join(destdir, lang, "LC_MESSAGES"),
+                         [os.path.join(i18ndir, lang, "LC_MESSAGES", f)])
+                )
+    return data_files
 
 def get_data_files():
     files = []
@@ -41,6 +55,11 @@ setup(name='vigilo-vigiconf-local',
         namespace_packages = [
             'vigilo',
             ],
+        message_extractors={
+            'src': [
+                ('**.py', 'python', None),
+            ],
+        },
         packages=find_packages("src"),
         entry_points={
             'console_scripts': [
@@ -48,6 +67,6 @@ setup(name='vigilo-vigiconf-local',
                 ],
             },
         package_dir={'': 'src'},
-        data_files=get_data_files(),
+        data_files=get_data_files() +
+            install_i18n("i18n", os.path.join(sys.prefix, 'share', 'locale')),
         )
-
