@@ -20,6 +20,8 @@ BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-build
 License:    GPLv2
 Buildarch:  noarch
 
+BuildRequires:   python26-distribute
+
 Requires:   python26-distribute
 Requires:   tar
 Requires:   vigilo-common
