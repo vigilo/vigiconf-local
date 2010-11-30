@@ -69,8 +69,11 @@ getent passwd vigiconf >/dev/null || \
 if [ `passwd -S vigiconf | cut -d" " -f2` == LK ]; then
     dd if=/dev/random bs=1 count=12 2>/dev/null | base64 - | passwd --stdin vigiconf >/dev/null
 fi
+exit 0
+
+%post
 if [ ! -d %{_localstatedir}/lib/vigilo/vigiconf/.ssh ]; then
-    mkdir %{_localstatedir}/lib/vigilo/vigiconf/.ssh
+    mkdir -p %{_localstatedir}/lib/vigilo/vigiconf/.ssh
     chown vigiconf: %{_localstatedir}/lib/vigilo/vigiconf/.ssh
     chmod 700 %{_localstatedir}/lib/vigilo/vigiconf/.ssh
     touch %{_localstatedir}/lib/vigilo/vigiconf/.ssh/authorized_keys
