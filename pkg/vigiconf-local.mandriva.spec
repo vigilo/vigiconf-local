@@ -68,6 +68,7 @@ if [ ! -d %{_localstatedir}/lib/vigilo/vigiconf/.ssh ]; then
     chmod 700 %{_localstatedir}/lib/vigilo/vigiconf/.ssh
     touch %{_localstatedir}/lib/vigilo/vigiconf/.ssh/authorized_keys
     chmod 600 %{_localstatedir}/lib/vigilo/vigiconf/.ssh/authorized_keys
+    chown vigiconf: %{_localstatedir}/lib/vigilo/vigiconf/.ssh/authorized_keys
 fi
 exit 0
 
