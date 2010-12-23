@@ -82,11 +82,8 @@ class ReceiveConf(Command):
         output = proc.communicate()[0]
         if proc.returncode != 0:
             os.remove(self.archive)
-            raise CommandExecError(_("Validation failed for application "
-                                    "'%(app)s'. Output: %(output)s") % {
-                                        'app': self.appname,
-                                        'output': output
-                                    })
+            raise CommandExecError(_("Can't untar the configuration: "
+                                     "%(output)s") % {'output': output})
         self.chmod()
         os.remove(self.archive)
 
