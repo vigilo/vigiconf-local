@@ -65,6 +65,8 @@ mv -f INSTALLED_FILES.filtered INSTALLED_FILES
 getent group vigiconf >/dev/null || groupadd -r vigiconf
 getent passwd vigiconf >/dev/null || \
     useradd -r -g vigiconf -d %{_localstatedir}/lib/vigilo/vigiconf -s /bin/bash vigiconf
+# VigiConf doit etre dans le groupe apache pour lire la conf de VigiRRD
+usermod -a -G apache vigiconf || :
 # unlock the account
 if [ `passwd -S vigiconf | cut -d" " -f2` == LK ]; then
     dd if=/dev/random bs=1 count=12 2>/dev/null | base64 - | passwd --stdin vigiconf >/dev/null
