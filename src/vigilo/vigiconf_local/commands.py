@@ -39,8 +39,8 @@ except IOError:
 _ = translate(__name__)
 
 class CommandError(Exception):
-    def __unicode__(self):
-        return unicode(self.message)
+    def __str__(self):
+        return self.message.encode("utf-8")
 class CommandExecError(CommandError):
     pass
 class CommandPrereqError(CommandError):

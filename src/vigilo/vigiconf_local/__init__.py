@@ -33,8 +33,9 @@ import inspect
 from vigilo.vigiconf_local.commands import \
         COMMANDS, CommandPrereqError, CommandExecError
 
-from vigilo.common.gettext import translate
+from vigilo.common.gettext import translate, translate_narrow
 _ = translate(__name__)
+N_ = translate_narrow(__name__)
 
 def main():
     parser = optparse.OptionParser(
@@ -73,10 +74,10 @@ def main():
     try:
         cmd.run()
     except CommandPrereqError, e:
-        print >>sys.stderr, _("Setup error: %s") % e
+        print >>sys.stderr, N_("Setup error: %s") % e
         sys.exit(11)
     except CommandExecError, e:
-        print >>sys.stderr, _("Error: %s") % e
+        print >>sys.stderr, N_("Error: %s") % e
         sys.exit(10)
 
 
