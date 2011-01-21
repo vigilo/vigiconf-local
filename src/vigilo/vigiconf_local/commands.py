@@ -74,7 +74,7 @@ class ReceiveConf(Command):
             shutil.rmtree(os.path.join(self.basedir, "new"))
         os.makedirs(os.path.join(self.basedir, "new"))
         os.chdir(os.path.join(self.basedir, "new"))
-        command = ["tar", "-xf", self.archive]
+        command = ["tar", "-pxf", self.archive]
         if self.debug:
             print " ".join(command)
             return
