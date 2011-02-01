@@ -144,7 +144,7 @@ class ValidateConf(Command):
             raise CommandExecError(_("Validation failed for application "
                                     "'%(app)s'. Output: %(output)s") % {
                                         'app': self.appname,
-                                        'output': output
+                                        'output': output.decode('utf-8')
                                     })
 
 
