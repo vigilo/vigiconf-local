@@ -213,10 +213,11 @@ class StartStopApp(Command):
 
     def run(self):
         self.check()
+        confdir = settings["vigiconf"].get("targetconfdir")
         if self.debug:
-            print "sh %s" % self.get_script()
+            print "sh %s %s" % (self.get_script(), confdir)
             return
-        proc = subprocess.Popen(["sh", self.get_script()],
+        proc = subprocess.Popen(["sh", self.get_script(), confdir],
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.STDOUT)
         output = proc.communicate()[0]
