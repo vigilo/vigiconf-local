@@ -213,7 +213,8 @@ class StartStopApp(Command):
 
     def run(self):
         self.check()
-        confdir = settings["vigiconf"].get("targetconfdir")
+        confdir = os.path.join(settings["vigiconf"].get("targetconfdir"),
+                               self.subdir)
         if self.debug:
             print "sh %s %s" % (self.get_script(), confdir)
             return
