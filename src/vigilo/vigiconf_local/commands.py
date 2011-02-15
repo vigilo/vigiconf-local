@@ -87,7 +87,7 @@ class ReceiveConf(Command):
         if proc.returncode != 0:
             os.remove(self.archive)
             raise CommandExecError(_("Can't untar the configuration: "
-                                     "%(output)s") % {'output': output})
+                                     "%(output)s") % {'output': output.decode("utf-8")})
         self.chmod()
         os.remove(self.archive)
 
@@ -228,7 +228,7 @@ class StartStopApp(Command):
                                     "Output: %(output)s") % {
                                         'action': self.action,
                                         'app': self.appname,
-                                        'output': output,
+                                        'output': output.decode("utf-8"),
                                     })
 
 
