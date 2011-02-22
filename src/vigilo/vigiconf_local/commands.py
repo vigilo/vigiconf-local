@@ -40,7 +40,9 @@ _ = translate(__name__)
 
 class CommandError(Exception):
     def __str__(self):
-        msg = super(CommandError, self).__str__()
+        msg = unicode(self.args[0]
+                      if len(self.args) <= 1
+                      else self.args)
         return msg.encode("utf-8")
 
 class CommandExecError(CommandError):
