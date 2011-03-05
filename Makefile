@@ -29,7 +29,7 @@ install_permissions:
 	chown -R vigiconf:vigiconf $(DESTDIR)$(VARDIR)
 
 lint: lint_pylint
-tests: tests_nose
+#tests: tests_nose
 clean: clean_python
 	rm -f settings-local.ini
 
