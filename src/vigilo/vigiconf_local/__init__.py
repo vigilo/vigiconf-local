@@ -74,10 +74,10 @@ def main():
     try:
         cmd.run()
     except CommandPrereqError, e:
-        print >>sys.stderr, N_("Setup error: %s") % e
+        print >> sys.stderr, N_("Setup error: %s") % e
         sys.exit(11)
     except CommandExecError, e:
-        print >>sys.stderr, N_("Error: %s") % e
+        print >> sys.stderr, N_("Error: %s") % e
         sys.exit(10)
 
 

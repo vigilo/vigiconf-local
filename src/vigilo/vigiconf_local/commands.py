@@ -38,7 +38,9 @@ except IOError:
 
 _ = translate(__name__)
 
+
 class CommandError(Exception):
+    """Classe de base pour les erreurs dans les commandes"""
     def __str__(self):
         msg = unicode(self.args[0]
                       if len(self.args) <= 1
@@ -46,34 +48,71 @@ class CommandError(Exception):
         return msg.encode("utf-8")
 
 class CommandExecError(CommandError):
+    """Erreur à l'exécution de la commande"""
     pass
 
 class CommandPrereqError(CommandError):
+    """
+    Erreur signalant que les conditions ne sont pas remplies pour exécuter la
+    commande
+    """
     pass
 
 
 class Command(object):
+    """
+    Classe de base (abstraite) pour les commandes disponibles
+    """
+
     def __init__(self, name):
+        """
+        @param name: nom de la commande
+        @type  name: C{str}
+        """
         self.name = name
         self.debug = False
 
+    def check(self):
+        """
+        Vérifie que toutes les conditions sont remplies pour pouvoir exécuter
+        la commande.
+        @return: C{True}, C{False} ou C{None} suivant l'implémentation dans
+            la sous-classe
+        @raise CommandPrereqError: si les conditions d'exécution ne sont
+            pas remplies
+        """
+        return True
+
     def run(self):
+        """
+        Méthode principale: exécute la commande
+        """
         raise NotImplementedError
 
 
 class ReceiveConf(Command):
+    """
+    Réceptionne la configuration télédéployée et la détarre dans le bon
+    dossier.
+    @ivar archive: le chemin vers l'archive télédéployée
+    """
 
     def __init__(self, archive):
+        """
+        @param archive: le chemin vers l'archive télédéployée
+        """
         self.basedir = settings["vigiconf"].get("targetconfdir")
         self.archive = archive
         super(ReceiveConf, self).__init__(name="receive")
 
     def check(self):
+        """Vérifie que l'archive existe bel et bien"""
         if not os.path.exists(self.archive):
             raise CommandPrereqError(_("The archive '%s' does not exist, "
                                         "copy it first") % self.archive)
 
     def run(self):
+        """Détarre l'archive et règle les droits"""
         self.check()
         if os.path.isdir(os.path.join(self.basedir, "new")):
             shutil.rmtree(os.path.join(self.basedir, "new"))
@@ -89,11 +128,13 @@ class ReceiveConf(Command):
         if proc.returncode != 0:
             os.remove(self.archive)
             raise CommandExecError(_("Can't untar the configuration: "
-                                     "%(output)s") % {'output': output.decode("utf-8")})
+                                     "%(output)s")
+                                   % {'output': output.decode("utf-8")})
         self.chmod()
         os.remove(self.archive)
 
     def chmod(self):
+        """Règle quelques droits par défaut pour un peu de sécurité"""
         subprocess.call(["chmod", "-R", "o-w",
                          os.path.join(self.basedir, "new")])
 
@@ -123,6 +164,10 @@ class ValidateConf(Command):
         super(ValidateConf, self).__init__(name="validate")
 
     def check(self):
+        """
+        Vérifie qu'il y a bien un script de validation pour l'application
+        demandée
+        """
         if not self.appname:
             raise CommandPrereqError(_("Please specify an application "
                                         "name to validate"))
@@ -132,6 +177,7 @@ class ValidateConf(Command):
         return True
 
     def run(self):
+        """Valide la configuration de l'application"""
         if not self.check():
             return # pas de script de validation, on a rien à faire
         os.chdir(self.basedir)
@@ -151,17 +197,25 @@ class ValidateConf(Command):
 
 
 class ActivateConf(Command):
+    """
+    Renomme les répertoires old, new et prod pour activer la configuration.
+    """
 
     def __init__(self):
         self.basedir = settings["vigiconf"].get("targetconfdir")
         super(ActivateConf, self).__init__(name="activate")
 
     def check(self):
+        """
+        Vérifie que le répertoire "new" est bien en place pour procéder à
+        l'activation
+        """
         if not os.path.isdir(os.path.join(self.basedir, "new")):
             raise CommandPrereqError(_("The 'new' directory does not exist. "
                                        "Deploy the configuration first."))
 
     def run(self):
+        """Active la configuration"""
         self.check()
         if self.debug:
             print _("Backing up the directory 'prod' to 'old', "
@@ -193,6 +247,9 @@ class ActivateConf(Command):
 
 
 class StartStopApp(Command):
+    """
+    Démarre ou arrête une application, grâce aux scripts fournis.
+    """
 
     def __init__(self, appname, action, subdir):
         self.appname = appname
@@ -201,11 +258,13 @@ class StartStopApp(Command):
         super(StartStopApp, self).__init__(name=action)
 
     def get_script(self):
+        """Récupère le chemin du script à exécuter"""
         return os.path.join(settings["vigiconf"].get("targetconfdir"),
                             self.subdir, "apps", self.appname,
                             "%s.sh" % self.action)
 
     def check(self):
+        """Vérifie que le script existe"""
         if not os.path.exists(self.get_script()):
             raise CommandPrereqError(_("The script '%(script)s' does not "
                                         "exist for application '%(app)s'") % {
@@ -214,6 +273,7 @@ class StartStopApp(Command):
                                         })
 
     def run(self):
+        """Démarre ou arrête l'application"""
         self.check()
         confdir = os.path.join(settings["vigiconf"].get("targetconfdir"),
                                self.subdir)
@@ -235,21 +295,31 @@ class StartStopApp(Command):
 
 
 class StartApp(StartStopApp):
+    """Démarre une application"""
+
     def __init__(self, appname):
-        super(StartApp, self).__init__(appname=appname, action="start", subdir="prod")
+        super(StartApp, self).__init__(appname=appname, action="start",
+                                       subdir="prod")
 
 class StopApp(StartStopApp):
+    """Arrête une application"""
     def __init__(self, appname):
         # subdir=new, parce que le process est :
         # 1. déploiement dans new
         # 2. arrêt des services
         # 3. new -> prod
         # 4. démarrage des services
-        # donc la première fois, le dossier prod est vide quand on arrête les services
-        super(StopApp, self).__init__(appname=appname, action="stop", subdir="new")
+        # donc la première fois, le dossier prod est vide quand on arrête les
+        # services
+        super(StopApp, self).__init__(appname=appname, action="stop",
+                                      subdir="new")
 
 
 class GetRevisions(Command):
+    """
+    Récupère et affiche les révisions SVN actuellement déployées dans les
+    répertoires old, new et prod.
+    """
 
     def __init__(self):
         self.basedir = settings["vigiconf"].get("targetconfdir")
@@ -257,12 +327,14 @@ class GetRevisions(Command):
         super(GetRevisions, self).__init__(name="get-revisions")
 
     def check(self):
+        """Vérifie que les répertoires existent"""
         for d in self.dirs:
             if not os.path.isdir(os.path.join(self.basedir, d)):
                 raise CommandPrereqError(
                         _("The directory '%s' does not exist.") % d)
 
     def run(self):
+        """Récupère et affiche les révisions"""
         self.check()
         if self.debug:
             print _("Getting revisions from these directories: %s") % \
