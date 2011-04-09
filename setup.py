@@ -40,11 +40,10 @@ setup(name='vigilo-vigiconf-local',
         author='Vigilo Team',
         author_email='contact@projet-vigilo.org',
         url='http://www.projet-vigilo.org/',
-        description='vigilo configuration local component',
         license='http://www.gnu.org/licenses/gpl-2.0.html',
-        long_description='The Vigilo configuration system generates\n'
-        +'configuration for every other component in Vigilo, distributes\n'
-        +'it and restarts the services.\n',
+        description="Local client for VigiConf",
+        long_description="This program installs the configuration pushed "
+                         "by VigiConf.",
         install_requires=[
             "setuptools",
             "vigilo-common",

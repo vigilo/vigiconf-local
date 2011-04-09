@@ -1,29 +1,29 @@
-%define module  vigiconf-local
-%define name    vigilo-%{module}
-%define version 2.0.0
-%define release 1%{?svn}%{?dist}
+%define module  @SHORT_NAME@
 
-Name:       %{name}
-Summary:    Local client for VigiConf
-Version:    %{version}
-Release:    %{release}
+Name:       vigilo-%{module}
+Summary:    @SUMMARY@
+Version:    @VERSION@
+Release:    1%{?svn}%{?dist}
 Source0:    %{name}-%{version}.tar.gz
-URL:        http://www.projet-vigilo.org
+URL:        @URL@
 Group:      System/Servers
 BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-build
 License:    GPLv2
+Buildarch:  noarch
 
-Requires(pre): rpm-helper
+BuildRequires:   python-setuptools
+BuildRequires:   python-babel
 
 Requires:   python >= 2.5
 Requires:   python-setuptools
 Requires:   tar
 Requires:   vigilo-common
-Buildarch:  noarch
+
+Requires(pre): rpm-helper
 
 
 %description
-This program installs the configuration pushed by VigiConf.
+@DESCRIPTION@
 This application is part of the Vigilo Project <http://vigilo-project.org>
 
 %prep

@@ -1,14 +1,11 @@
-%define module  vigiconf-local
-%define name    vigilo-%{module}
-%define version 2.0.0
-%define release 1%{?svn}%{?dist}
+%define module  @SHORT_NAME@
 
-Name:       %{name}
-Summary:    Local client for VigiConf
-Version:    %{version}
-Release:    %{release}
+Name:       vigilo-%{module}
+Summary:    @SUMMARY@
+Version:    @VERSION@
+Release:    1%{?svn}%{?dist}
 Source0:    %{name}-%{version}.tar.gz
-URL:        http://www.projet-vigilo.org
+URL:        @URL@
 Group:      System/Servers
 BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-build
 License:    GPLv2
@@ -24,8 +21,7 @@ Requires(pre): shadow-utils
 
 
 %description
-This program installs the configuration pushed by VigiConf.
-applications used in the supervision system.
+@DESCRIPTION@
 This application is part of the Vigilo Project <http://vigilo-project.org>
 
 %prep
@@ -59,10 +55,9 @@ mv -f INSTALLED_FILES.filtered INSTALLED_FILES
 getent group vigiconf >/dev/null || groupadd -r vigiconf
 getent passwd vigiconf >/dev/null || \
     useradd -r -g vigiconf -d %{_localstatedir}/lib/vigilo/vigiconf -s /bin/bash vigiconf
-# VigiConf doit etre dans le groupe apache pour lire la conf de VigiRRD
-usermod -a -G apache vigiconf || :
 # unlock the account
 if [ `passwd -S vigiconf | cut -d" " -f2` == LK ]; then
+    # unlock the account
     dd if=/dev/random bs=1 count=12 2>/dev/null | base64 - | passwd --stdin vigiconf >/dev/null
 fi
 exit 0
