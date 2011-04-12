@@ -12,9 +12,13 @@ settings-local.ini: settings-local.ini.in
 	sed -e 's,@LOCALSTATEDIR@,$(LOCALSTATEDIR),;s,@SYSCONFDIR@,$(SYSCONFDIR),g' \
 		$^ > $@
 
-install: settings-local.ini $(PYTHON)
-	$(PYTHON) setup.py install --single-version-externally-managed --root=$(DESTDIR) --record=INSTALLED_FILES
-	chmod a+rX -R $(DESTDIR)$(PREFIX)/lib*/python*/*
+install: install_python install_users install_permissions
+install_pkg: install_python_pkg
+
+install_python: settings-local.ini $(PYTHON)
+	$(PYTHON) setup.py install --root=$(DESTDIR) --record=INSTALLED_FILES
+install_python_pkg: settings-local.ini $(PYTHON)
+	$(PYTHON) setup.py install --single-version-externally-managed --root=$(DESTDIR)
 
 install_users:
 	@echo "Creating the vigiconf user..."
@@ -34,5 +38,4 @@ clean: clean_python
 	rm -f settings-local.ini
 
 
-.PHONY: all clean install apidoc lint install_users install tests
-
+.PHONY: all clean install apidoc lint install_users install install_pkg install_python install_python_pkg install_permissions tests
