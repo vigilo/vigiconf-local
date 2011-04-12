@@ -12,8 +12,8 @@ settings-local.ini: settings-local.ini.in
 	sed -e 's,@LOCALSTATEDIR@,$(LOCALSTATEDIR),;s,@SYSCONFDIR@,$(SYSCONFDIR),g' \
 		$^ > $@
 
-install: install_python install_users install_permissions
-install_pkg: install_python_pkg
+install: build install_python install_users install_permissions
+install_pkg: build install_python_pkg
 
 install_python: settings-local.ini $(PYTHON)
 	$(PYTHON) setup.py install --record=INSTALLED_FILES
