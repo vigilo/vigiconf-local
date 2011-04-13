@@ -1,10 +1,9 @@
 NAME := vigiconf-local
-CONFDIR := $(SYSCONFDIR)/vigilo/$(NAME)
-VARDIR := $(LOCALSTATEDIR)/lib/vigilo/$(NAME)
 
 all: build
 
 include buildenv/Makefile.common
+VARDIR := $(LOCALSTATEDIR)/lib/vigilo/vigiconf
 
 build: settings-local.ini build
 
@@ -22,8 +21,8 @@ install_python_pkg: settings-local.ini $(PYTHON)
 
 install_users:
 	@echo "Creating the vigiconf user..."
-	-groupadd vigiconf
-	-useradd -s /bin/bash -M -d $(VARDIR) -g vigiconf -c 'Vigilo VigiConf user' vigiconf
+	-/usr/sbin/groupadd vigiconf
+	-/usr/sbin/useradd -s /bin/bash -M -d $(VARDIR) -g vigiconf -c 'Vigilo VigiConf user' vigiconf
 	# unlock the account if necessary
 	if [ `passwd -S vigiconf | cut -d" " -f2` == LK ]; then \
 		dd if=/dev/random bs=1 count=12 2>/dev/null | base64 - | passwd --stdin vigiconf ;\
