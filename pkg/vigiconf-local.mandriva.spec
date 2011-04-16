@@ -68,7 +68,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc COPYING
+%doc COPYING.txt
 %dir %{_sysconfdir}/vigilo
 %dir %attr(-,vigiconf,vigiconf) %{_sysconfdir}/vigilo/vigiconf/
 %config(noreplace) %attr(640,vigiconf,vigiconf) %{_sysconfdir}/vigilo/vigiconf/settings-local.ini
