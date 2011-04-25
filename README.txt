@@ -27,6 +27,18 @@ Installation
 L'installation se fait par la commande ``make install`` (à exécuter en
 ``root``).
 
+Puis, si cela n'a pas été fait lors de l'install de VigiConf, il faut ajouter
+des droits sudo à l'utilisateur ``vigiconf`` pour lui permettre de redémarrer
+les services qu'il télé-administre. Pour cela, ajouter à la fin du fichier
+``/etc/sudoers`` les lignes suivantes ::
+
+    # VigiConf
+    Defaults:vigiconf !requiretty
+    Cmnd_Alias INIT = /etc/init.d/*
+    Cmnd_Alias VALID = /usr/sbin/nagios
+    vigiconf ALL=(ALL) NOPASSWD: INIT, VALID
+
+
 
 License
 -------
