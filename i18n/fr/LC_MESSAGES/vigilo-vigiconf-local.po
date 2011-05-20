@@ -107,8 +107,7 @@ msgstr "Le script '%(script)s' n'existe pas pour l'application '%(app)s'"
 #, python-format
 msgid "Action %(action)s failed for application %(app)s. Output: %(output)s"
 msgstr ""
-"L'action %(action)s a échoué pour l'application %(app)s. \"\n"
-"\"Sortie : %(output)s"
+"L'action %(action)s a échoué pour l'application %(app)s. Sortie : %(output)s"
 
 #: src/vigilo/vigiconf_local/commands.py:263
 #, python-format
