@@ -357,6 +357,33 @@ class GetRevisions(Command):
             print "%s %s" % (d, rev)
 
 
+class SetRevision(Command):
+    """
+    Affecte la révision SVN actuellement déployée.
+    """
+
+    def __init__(self, rev):
+        self.basedir = os.path.join(settings["vigiconf"].get("targetconfdir"),
+                                    "new")
+        self.rev = rev
+        super(SetRevision, self).__init__(name="set-revision")
+
+    def check(self):
+        """Vérifie que les répertoires existent"""
+        if not os.path.isdir(self.basedir):
+            raise CommandPrereqError(_("The directory 'new' does not exist."))
+
+    def run(self):
+        """Écrit la révision"""
+        self.check()
+        if self.debug:
+            print _("Setting revision to: %s") % self.rev
+            return
+        rev_file = open(os.path.join(self.basedir, "revisions.txt"), "w")
+        rev_file.write("Revision: %s\n" % self.rev)
+        rev_file.close()
+
+
 
 COMMANDS = {
         "stop-app": StopApp,
@@ -365,5 +392,6 @@ COMMANDS = {
         "activate-conf": ActivateConf,
         "receive-conf": ReceiveConf,
         "get-revisions": GetRevisions,
+        "set-revision": SetRevision,
 #        "revert-conf": RevertConf,
 }
