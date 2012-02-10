@@ -31,10 +31,6 @@ import re
 from vigilo.common.gettext import translate
 
 from vigilo.common.conf import settings
-try:
-    settings.load_module("vigilo.vigiconf")
-except IOError:
-    settings.load_module("vigilo.vigiconf", "settings-local.ini")
 
 _ = translate(__name__)
 

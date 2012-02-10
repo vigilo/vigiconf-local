@@ -30,6 +30,8 @@ import sys
 import optparse
 import inspect
 
+from vigilo.common.conf import settings
+
 from vigilo.vigiconf_local.commands import \
         COMMANDS, CommandPrereqError, CommandExecError
 
@@ -51,6 +53,11 @@ def main():
     if cmd_name not in COMMANDS:
         parser.error(_("Unknown command. Available commands: %s") %
                         ", ".join(COMMANDS.keys()))
+
+    try:
+        settings.load_module("vigilo.vigiconf")
+    except IOError:
+        settings.load_module("vigilo.vigiconf", "settings-local.ini")
 
     cmd_args = inspect.getargspec(COMMANDS[cmd_name].__init__)
     cmd_min_args = len(cmd_args[0]) - 1
