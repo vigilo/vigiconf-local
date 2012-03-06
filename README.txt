@@ -37,6 +37,7 @@ les services qu'il télé-administre. Pour cela, ajouter à la fin du fichier
     Cmnd_Alias INIT = /etc/init.d/*
     Cmnd_Alias VALID = /usr/sbin/nagios
     vigiconf ALL=(ALL) NOPASSWD: INIT, VALID
+    vigiconf ALL=(nagios) NOPASSWD: /usr/bin/pkill
 
 
 
