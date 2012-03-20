@@ -5,7 +5,7 @@ all: build
 include buildenv/Makefile.common.python
 VARDIR := $(LOCALSTATEDIR)/lib/vigilo/vigiconf
 
-build: settings-local.ini build
+build: settings-local.ini
 
 settings-local.ini: settings-local.ini.in
 	sed -e 's,@LOCALSTATEDIR@,$(LOCALSTATEDIR),;s,@SYSCONFDIR@,$(SYSCONFDIR),g' \
