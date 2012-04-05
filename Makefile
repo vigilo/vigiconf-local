@@ -2,7 +2,7 @@ NAME := vigiconf-local
 
 all: build
 
-include buildenv/Makefile.common
+include buildenv/Makefile.common.python
 VARDIR := $(LOCALSTATEDIR)/lib/vigilo/vigiconf
 
 build: settings-local.ini build
