@@ -43,8 +43,7 @@ def main():
     # Chargement des traductions d'optparse.
     prepare_argparse()
 
-    parser = optparse.OptionParser(
-        _("Usage: %prog [options] command [arguments]"))
+    parser = optparse.OptionParser(_("%prog [options] command [arguments]"))
     parser.add_option("-n", "--dry-run", action="store_true", dest="dryrun",
                       help=_("Only print the command that would be run"))
     opts, args = parser.parse_args()

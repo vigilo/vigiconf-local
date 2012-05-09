@@ -1,16 +1,16 @@
 # English translations for vigilo-vigiconf-local.
-# Copyright (C) 2011 ORGANIZATION
+# Copyright (C) 2012 ORGANIZATION
 # This file is distributed under the same license as the
 # vigilo-vigiconf-local
 # project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: vigilo-vigiconf-local 2.0.0\n"
+"Project-Id-Version: vigilo-vigiconf-local 2.0.16\n"
 "Report-Msgid-Bugs-To: contact@projet-vigilo.org\n"
-"POT-Creation-Date: 2011-03-22 10:04+0100\n"
-"PO-Revision-Date: 2011-03-22 10:04+0100\n"
+"POT-Creation-Date: 2012-05-09 11:54+0200\n"
+"PO-Revision-Date: 2012-05-09 11:54+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -19,72 +19,72 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.4\n"
 
-#: src/vigilo/vigiconf_local/__init__.py:42
-msgid "Usage: %prog [options] command [arguments]"
-msgstr "Usage: %prog [options] command [arguments]"
+#: src/vigilo/vigiconf_local/__init__.py:45
+msgid "%prog [options] command [arguments]"
+msgstr "%prog [options] command [arguments]"
 
-#: src/vigilo/vigiconf_local/__init__.py:44
+#: src/vigilo/vigiconf_local/__init__.py:47
 msgid "Only print the command that would be run"
 msgstr "Only print the command that would be run"
 
-#: src/vigilo/vigiconf_local/__init__.py:47
+#: src/vigilo/vigiconf_local/__init__.py:50
 #, python-format
 msgid "No command selected. Available commands: %s"
 msgstr "No command selected. Available commands: %s"
 
-#: src/vigilo/vigiconf_local/__init__.py:52
+#: src/vigilo/vigiconf_local/__init__.py:55
 #, python-format
 msgid "Unknown command. Available commands: %s"
 msgstr "Unknown command. Available commands: %s"
 
-#: src/vigilo/vigiconf_local/__init__.py:66
+#: src/vigilo/vigiconf_local/__init__.py:69
 #, python-format
 msgid "Wrong number of arguments. Expected: %s"
 msgstr "Wrong number of arguments. Expected: %s"
 
-#: src/vigilo/vigiconf_local/__init__.py:77
+#: src/vigilo/vigiconf_local/__init__.py:80
 #, python-format
 msgid "Setup error: %s"
 msgstr "Setup error: %s"
 
-#: src/vigilo/vigiconf_local/__init__.py:80
+#: src/vigilo/vigiconf_local/__init__.py:83
 #, python-format
 msgid "Error: %s"
 msgstr "Error: %s"
 
-#: src/vigilo/vigiconf_local/commands.py:73
+#: src/vigilo/vigiconf_local/commands.py:111
 #, python-format
 msgid "The archive '%s' does not exist, copy it first"
 msgstr "The archive '%s' does not exist, copy it first"
 
-#: src/vigilo/vigiconf_local/commands.py:91
+#: src/vigilo/vigiconf_local/commands.py:130
 #, python-format
 msgid "Can't untar the configuration: %(output)s"
 msgstr "Can't untar the configuration: %(output)s"
 
-#: src/vigilo/vigiconf_local/commands.py:127
+#: src/vigilo/vigiconf_local/commands.py:172
 msgid "Please specify an application name to validate"
 msgstr "Please specify an application name to validate"
 
-#: src/vigilo/vigiconf_local/commands.py:130
+#: src/vigilo/vigiconf_local/commands.py:175
 #, python-format
 msgid "No validation script: %s"
 msgstr "No validation script: %s"
 
-#: src/vigilo/vigiconf_local/commands.py:146
+#: src/vigilo/vigiconf_local/commands.py:192
 #, python-format
 msgid "Validation failed for application '%(app)s'. Output: %(output)s"
 msgstr "Validation failed for application '%(app)s'. Output: %(output)s"
 
-#: src/vigilo/vigiconf_local/commands.py:161
+#: src/vigilo/vigiconf_local/commands.py:214
 msgid "The 'new' directory does not exist. Deploy the configuration first."
 msgstr "The 'new' directory does not exist. Deploy the configuration first."
 
-#: src/vigilo/vigiconf_local/commands.py:167
+#: src/vigilo/vigiconf_local/commands.py:221
 msgid "Backing up the directory 'prod' to 'old', and renaming 'new' into 'prod'"
 msgstr "Backing up the directory 'prod' to 'old', and renaming 'new' into 'prod'"
 
-#: src/vigilo/vigiconf_local/commands.py:183
+#: src/vigilo/vigiconf_local/commands.py:237
 #, python-format
 msgid ""
 "Configuration activation failed: %(error)s. User '%(user)s' must have "
@@ -93,28 +93,37 @@ msgstr ""
 "Configuration activation failed: %(error)s. User '%(user)s' must have "
 "write access to '%(dir)s'."
 
-#: src/vigilo/vigiconf_local/commands.py:191
+#: src/vigilo/vigiconf_local/commands.py:245
 #, python-format
 msgid "Configuration activation failed: %s."
 msgstr "Configuration activation failed: %s."
 
-#: src/vigilo/vigiconf_local/commands.py:210
+#: src/vigilo/vigiconf_local/commands.py:269
 #, python-format
 msgid "The script '%(script)s' does not exist for application '%(app)s'"
 msgstr "The script '%(script)s' does not exist for application '%(app)s'"
 
-#: src/vigilo/vigiconf_local/commands.py:228
+#: src/vigilo/vigiconf_local/commands.py:288
 #, python-format
 msgid "Action %(action)s failed for application %(app)s. Output: %(output)s"
 msgstr "Action %(action)s failed for application %(app)s. Output: %(output)s"
 
-#: src/vigilo/vigiconf_local/commands.py:263
+#: src/vigilo/vigiconf_local/commands.py:334
 #, python-format
 msgid "The directory '%s' does not exist."
 msgstr "The directory '%s' does not exist."
 
-#: src/vigilo/vigiconf_local/commands.py:268
+#: src/vigilo/vigiconf_local/commands.py:340
 #, python-format
 msgid "Getting revisions from these directories: %s"
 msgstr "Getting revisions from these directories: %s"
+
+#: src/vigilo/vigiconf_local/commands.py:374
+msgid "The directory 'new' does not exist."
+msgstr "The directory 'new' does not exist."
+
+#: src/vigilo/vigiconf_local/commands.py:380
+#, python-format
+msgid "Setting revision to: %s"
+msgstr "Setting revision to: %s"
 
