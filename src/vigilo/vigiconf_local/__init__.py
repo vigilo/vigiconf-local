@@ -39,19 +39,23 @@ from vigilo.common.gettext import translate, translate_narrow
 _ = translate(__name__)
 N_ = translate_narrow(__name__)
 
+from vigilo.common.argparse import prepare_argparse
+
 def main():
-    parser = optparse.OptionParser(
-        _("Usage: %prog [options] command [arguments]"))
+    # Chargement des traductions d'optparse.
+    prepare_argparse()
+
+    parser = optparse.OptionParser(_("%prog [options] command [arguments]"))
     parser.add_option("-n", "--dry-run", action="store_true", dest="dryrun",
                       help=_("Only print the command that would be run"))
     opts, args = parser.parse_args()
     if not args:
-        parser.error(_("No command selected. Available commands: %s") %
+        parser.error(N_("No command selected. Available commands: %s") %
                         ", ".join(COMMANDS.keys()))
 
     cmd_name = args[0]
     if cmd_name not in COMMANDS:
-        parser.error(_("Unknown command. Available commands: %s") %
+        parser.error(N_("Unknown command. Available commands: %s") %
                         ", ".join(COMMANDS.keys()))
 
     try:
@@ -70,7 +74,7 @@ def main():
             if index + 1 > cmd_min_args:
                 arg = "[%s]" % arg
             args_list.append(arg)
-        parser.error(_("Wrong number of arguments. Expected: %s") %
+        parser.error(N_("Wrong number of arguments. Expected: %s") %
                         " ".join(args_list))
 
     cmd = COMMANDS[cmd_name](*args[1:])
