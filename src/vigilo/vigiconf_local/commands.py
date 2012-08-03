@@ -282,11 +282,12 @@ class StartStopApp(Command):
         output = proc.communicate()[0]
         if proc.returncode != 0:
             raise CommandExecError(_("Action %(action)s failed for "
-                                    "application %(app)s. "
+                                    "application %(app)s. Code: %(code)d. "
                                     "Output: %(output)s") % {
                                         'action': self.action,
                                         'app': self.appname,
                                         'output': output.decode("utf-8"),
+                                        'code': proc.returncode,
                                     })
 
 

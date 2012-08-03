@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: vigilo-vigiconf-local 2.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2010-11-19 13:17+0100\n"
-"PO-Revision-Date: 2012-05-09 11:54+0200\n"
+"PO-Revision-Date: 2012-07-18 17:58+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -19,36 +19,36 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.4\n"
 
-#: src/vigilo/vigiconf_local/__init__.py:45
+#: src/vigilo/vigiconf_local/__init__.py:46
 #, fuzzy
 msgid "%prog [options] command [arguments]"
 msgstr "Verwendung: %prog [Optionen] Befehl [Argumente]"
 
-#: src/vigilo/vigiconf_local/__init__.py:47
+#: src/vigilo/vigiconf_local/__init__.py:48
 msgid "Only print the command that would be run"
 msgstr "Nur den auszuführenden Befehl drucken"
 
-#: src/vigilo/vigiconf_local/__init__.py:50
+#: src/vigilo/vigiconf_local/__init__.py:51
 #, python-format
 msgid "No command selected. Available commands: %s"
 msgstr "Kein Befehl ausgewählt. Verfügbarer Befehl: %s"
 
-#: src/vigilo/vigiconf_local/__init__.py:55
+#: src/vigilo/vigiconf_local/__init__.py:56
 #, python-format
 msgid "Unknown command. Available commands: %s"
 msgstr "Unbekannter Befehl. Verfügbarer Befehl: %s"
 
-#: src/vigilo/vigiconf_local/__init__.py:69
+#: src/vigilo/vigiconf_local/__init__.py:70
 #, python-format
 msgid "Wrong number of arguments. Expected: %s"
 msgstr "Fehlerhafte Argumentanzahl. Erwartet: %s"
 
-#: src/vigilo/vigiconf_local/__init__.py:80
+#: src/vigilo/vigiconf_local/__init__.py:81
 #, python-format
 msgid "Setup error: %s"
 msgstr "Setup-Fehler: %s"
 
-#: src/vigilo/vigiconf_local/__init__.py:83
+#: src/vigilo/vigiconf_local/__init__.py:84
 #, python-format
 msgid "Error: %s"
 msgstr "Fehler: %s"
@@ -112,27 +112,29 @@ msgstr "Das Skript '%(script)s' ist für  Anwendung '%(app)s'nicht vorhanden"
 
 #: src/vigilo/vigiconf_local/commands.py:288
 #, python-format
-msgid "Action %(action)s failed for application %(app)s. Output: %(output)s"
+msgid ""
+"Action %(action)s failed for application %(app)s. Code: %(code)d. Output:"
+" %(output)s"
 msgstr ""
-"Aktion %(action)s für Anwendung %(app)s fehlgeschlagen. Ausgabe: "
-"%(output)s"
+"Aktion %(action)s für Anwendung %(app)s fehlgeschlagen. Kode: %(code)d. "
+"Ausgabe: %(output)s"
 
-#: src/vigilo/vigiconf_local/commands.py:334
+#: src/vigilo/vigiconf_local/commands.py:335
 #, python-format
 msgid "The directory '%s' does not exist."
 msgstr "Das Verzeichnis '%s' ist nicht vorhandent."
 
-#: src/vigilo/vigiconf_local/commands.py:340
+#: src/vigilo/vigiconf_local/commands.py:341
 #, python-format
 msgid "Getting revisions from these directories: %s"
 msgstr "Es werden Revisionen aus diesen Verzeichnissen erhalten: %s"
 
-#: src/vigilo/vigiconf_local/commands.py:374
+#: src/vigilo/vigiconf_local/commands.py:375
 #, fuzzy
 msgid "The directory 'new' does not exist."
 msgstr "Das Verzeichnis '%s' ist nicht vorhandent."
 
-#: src/vigilo/vigiconf_local/commands.py:380
+#: src/vigilo/vigiconf_local/commands.py:381
 #, fuzzy, python-format
 msgid "Setting revision to: %s"
 msgstr "Es werden Revisionen aus diesen Verzeichnissen erhalten: %s"
