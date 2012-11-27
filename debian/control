@@ -1,0 +1,22 @@
+Source: vigilo-vigiconf-local
+Section: python
+Priority: extra
+Maintainer: Vigilo Team <contact@projet-vigilo.org>
+Build-Depends:
+ debhelper (>= 7.0.50~),
+ python (>= 2.6.6-3~),
+ python-setuptools
+Standards-Version: 3.8.4
+Homepage: http://www.projet-vigilo.org/
+X-Python-Version: >= 2.5
+
+Package: vigilo-vigiconf-local
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python:Depends},
+ tar
+Description: Local client for VigiConf
+ This program installs the configuration pushed
+ by VigiConf.
+
