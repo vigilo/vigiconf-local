@@ -1,6 +1,18 @@
 [vigiconf]
 targetconfdir = @SYSCONFDIR@/vigilo/vigiconf
 
+httpd_init    = @INITDIR@/@HTTPD_BIN@
+metro_init    = @INITDIR@/vigilo-connector-metro
+nagios_init   = @INITDIR@/@NAGIOS_BIN@
+nfacctd_init  = @INITDIR@/nfacctd
+snmpd_init    = @INITDIR@/snmpd
+snmptt_init   = @INITDIR@/snmptt
+
+nagios_bin    = /usr/sbin/@NAGIOS_BIN@
+sqlite3_bin   = sqlite3
+
+nagios_user   = nagios
+nagios_cfg    = @NCONFDIR@/nagios.cfg
 
 #
 # LOGGING
@@ -52,4 +64,3 @@ class=vigilo.common.logging.VigiloFormatter
 format=%(processName)s[%(process)d]: %(levelname)s::%(name)s::%(message)s
 datefmt=
 class=vigilo.common.logging.VigiloFormatter
-

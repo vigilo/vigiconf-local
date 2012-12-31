@@ -8,8 +8,13 @@ VARDIR := $(LOCALSTATEDIR)/lib/vigilo/vigiconf
 build: settings-local.ini
 
 settings-local.ini: settings-local.ini.in
-	sed -e 's,@LOCALSTATEDIR@,$(LOCALSTATEDIR),;s,@SYSCONFDIR@,$(SYSCONFDIR),g' \
-		$^ > $@
+	sed -e 's,@LOCALSTATEDIR@,$(LOCALSTATEDIR),' \
+		-e 's,@SYSCONFDIR@,$(SYSCONFDIR),g' \
+		-e 's,@HTTPD_BIN@,$(HTTPD_BIN),g' \
+		-e 's,@NCONFDIR@,$(NCONFDIR),g' \
+		-e 's,@NAGIOS_BIN@,$(NAGIOS_BIN),g' \
+		-e 's,@INITDIR@,$(INITDIR),g' \
+			$^ > $@
 
 install: build install_python install_users install_permissions
 install_pkg: build install_python_pkg

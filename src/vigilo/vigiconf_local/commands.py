@@ -27,6 +27,7 @@ import os
 import shutil
 import subprocess
 import re
+from glob import glob
 
 from vigilo.common.gettext import translate
 
@@ -128,11 +129,23 @@ class ReceiveConf(Command):
                                    % {'output': output.decode("utf-8")})
         self.chmod()
         os.remove(self.archive)
+        self.substitute_variables()
 
     def chmod(self):
         """Règle quelques droits par défaut pour un peu de sécurité"""
-        subprocess.call(["chmod", "-R", "o-w",
+        subprocess.call(["chmod", "-R", "u+rw,o-w",
                          os.path.join(self.basedir, "new")])
+
+    def substitute_variables(self):
+        for script in glob(os.path.join(self.basedir, "new", "apps",
+                                        "*", "*.sh")):
+            fd = open(script, 'r+')
+            try:
+                content = fd.read()
+                fd.seek(0)
+                fd.write(content % settings["vigiconf"])
+            finally:
+                fd.close()
 
 
 class ValidateConf(Command):
