@@ -58,10 +58,7 @@ def main():
         parser.error(N_("Unknown command. Available commands: %s") %
                         ", ".join(COMMANDS.keys()))
 
-    try:
-        settings.load_module("vigilo.vigiconf")
-    except IOError:
-        settings.load_module("vigilo.vigiconf", "settings-local.ini")
+    settings.load_module("vigilo.vigiconf", "settings-local.ini")
 
     cmd_args = inspect.getargspec(COMMANDS[cmd_name].__init__)
     cmd_min_args = len(cmd_args[0]) - 1

@@ -87,6 +87,42 @@ class Command(object):
         raise NotImplementedError
 
 
+class SubstitutedCommand(Command):
+    """
+    Fournit une méthode permettant de substituer les variables Python
+    d'un script avec les valeurs correspondant à ces variables,
+    telles que définies dans le fichier de configuration settings-local.ini
+    de vigiconf-local.
+    """
+
+    def _substitute(self, script):
+        """
+        Procède à la substitution des variables Python d'un script
+        par les valeurs présentes dans la section "vigiconf" du fichier
+        de configuration de vigiconf-local.
+
+        @param script: Chemin complet jusqu'au script sur lequel
+            seront appliquées les substitutions.
+        @type script: C{str}
+        @return: Chemin complet jusqu'au nouveau script, dans lequel
+            les variables de substitution ont été remplacées.
+            C'est ce script-ci qui devra être exécuté à la place
+            du script original.
+        @rtype: C{str}
+        """
+        fd = open(script + '.in', 'r')
+        try:
+            content = fd.read()
+        finally:
+            fd.close()
+        fd = open(script, 'w')
+        try:
+            fd.write(content % settings["vigiconf"])
+        finally:
+            fd.close()
+        return script
+
+
 class ReceiveConf(Command):
     """
     Réceptionne la configuration télédéployée et la détarre dans le bon
@@ -129,26 +165,14 @@ class ReceiveConf(Command):
                                    % {'output': output.decode("utf-8")})
         self.chmod()
         os.remove(self.archive)
-        self.substitute_variables()
 
     def chmod(self):
         """Règle quelques droits par défaut pour un peu de sécurité"""
         subprocess.call(["chmod", "-R", "u+rw,o-w",
                          os.path.join(self.basedir, "new")])
 
-    def substitute_variables(self):
-        for script in glob(os.path.join(self.basedir, "new", "apps",
-                                        "*", "*.sh")):
-            fd = open(script, 'r+')
-            try:
-                content = fd.read()
-                fd.seek(0)
-                fd.write(content % settings["vigiconf"])
-            finally:
-                fd.close()
 
-
-class ValidateConf(Command):
+class ValidateConf(SubstitutedCommand):
     """
     Validation de la configuration
 
@@ -180,8 +204,9 @@ class ValidateConf(Command):
         if not self.appname:
             raise CommandPrereqError(_("Please specify an application "
                                         "name to validate"))
-        if not os.path.exists(self.valid_script):
-            print _("No validation script: %s") % self.valid_script
+        script = self.valid_script + '.in'
+        if not os.path.exists(script):
+            print _("No validation script: %s") % script
             return False
         return True
 
@@ -190,7 +215,8 @@ class ValidateConf(Command):
         if not self.check():
             return # pas de script de validation, on a rien à faire
         os.chdir(self.basedir)
-        command = ["sh", self.valid_script, self.basedir, self.location]
+        command = ["sh", self._substitute(self.valid_script),
+                   self.basedir, self.location]
         if self.debug:
             print " ".join(command)
             return
@@ -255,7 +281,7 @@ class ActivateConf(Command):
             raise CommandExecError(msg)
 
 
-class StartStopApp(Command):
+class StartStopApp(SubstitutedCommand):
     """
     Démarre ou arrête une application, grâce aux scripts fournis.
     """
@@ -274,10 +300,11 @@ class StartStopApp(Command):
 
     def check(self):
         """Vérifie que le script existe"""
-        if not os.path.exists(self.get_script()):
+        script = self.get_script() + '.in'
+        if not os.path.exists(script):
             raise CommandPrereqError(_("The script '%(script)s' does not "
                                         "exist for application '%(app)s'") % {
-                                            'script': self.get_script(),
+                                            'script': script,
                                             'app': self.appname,
                                         })
 
@@ -289,9 +316,10 @@ class StartStopApp(Command):
         if self.debug:
             print "sh %s %s" % (self.get_script(), confdir)
             return
-        proc = subprocess.Popen(["sh", self.get_script(), confdir],
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.STDOUT)
+        proc = subprocess.Popen(
+            ["sh", self._substitute(self.get_script()), confdir],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT)
         output = proc.communicate()[0]
         if proc.returncode != 0:
             raise CommandExecError(_("Action %(action)s failed for "
