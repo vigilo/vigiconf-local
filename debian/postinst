@@ -59,7 +59,7 @@ case "$1" in
         # unlock the account
         if [ "`passwd -S $SERVER_USER | cut -d' ' -f2`" = "LK" ]; then
             # unlock the account
-            dd  if=/dev/random bs=1 count=12 2>/dev/null | base64 - | \
+            dd if=/dev/urandom | tr -dc A-Za-z0-9 | head -c12 | \
                 passwd --stdin $SERVER_USER >/dev/null
         fi
 

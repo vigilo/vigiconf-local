@@ -55,7 +55,7 @@ getent passwd vigiconf >/dev/null || \
 # unlock the account
 if [ `passwd -S vigiconf | cut -d" " -f2` == LK ]; then
     # unlock the account
-    dd if=/dev/random bs=1 count=12 2>/dev/null | base64 - | passwd --stdin vigiconf >/dev/null
+    dd if=/dev/urandom | tr -dc A-Za-z0-9 | head -c12 | passwd --stdin vigiconf >/dev/null
 fi
 exit 0
 
