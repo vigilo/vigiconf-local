@@ -22,7 +22,8 @@ install_pkg: build install_python_pkg
 install_python: settings-local.ini $(PYTHON)
 	$(PYTHON) setup.py install --record=INSTALLED_FILES
 install_python_pkg: settings-local.ini $(PYTHON)
-	$(PYTHON) setup.py install --single-version-externally-managed --root=$(DESTDIR)
+	$(PYTHON) setup.py install --single-version-externally-managed \
+		$(SETUP_PY_OPTS) --root=$(DESTDIR)
 
 install_users:
 	@echo "Creating the vigiconf user..."
