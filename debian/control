@@ -15,6 +15,7 @@ Architecture: all
 Depends:
  ${misc:Depends},
  ${python:Depends},
+ bash,
  tar
 Description: Local client for VigiConf
  This program installs the configuration pushed
