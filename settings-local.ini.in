@@ -1,16 +1,22 @@
 [vigiconf]
 targetconfdir = @SYSCONFDIR@/vigilo/vigiconf
 
-httpd_init    = @INITDIR@/@HTTPD_BIN@
 metro_init    = @INITDIR@/vigilo-connector-metro
-nagios_init   = @INITDIR@/@NAGIOS_BIN@
-nfacctd_init  = @INITDIR@/nfacctd
-snmpd_init    = @INITDIR@/snmpd
-snmptt_init   = @INITDIR@/snmptt
 
-nagios_bin    = /usr/sbin/@NAGIOS_BIN@
+httpd_bin     = @HTTPD_BIN@
+nagios_bin    = @NAGIOS_BIN@
+nfacctd_bin   = nfacctd
+snmpd_bin     = snmpd
+snmptt_bin    = snmptt
 sqlite3_bin   = sqlite3
 
+metro_svc     = vigilo-connector-metro
+httpd_svc     = httpd
+snmptt_svc    = snmptt
+snmpd_svc     = snmpd
+nfacctd_svc   = nfacctd
+
+nagios_svc    = nagios
 nagios_user   = nagios
 nagios_cfg    = @NCONFDIR@/nagios.cfg
 
