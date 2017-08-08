@@ -1,8 +1,6 @@
 [vigiconf]
 targetconfdir = @SYSCONFDIR@/vigilo/vigiconf
 
-metro_init    = @INITDIR@/vigilo-connector-metro
-
 httpd_bin     = @HTTPD_BIN@
 nagios_bin    = @NAGIOS_BIN@
 nfacctd_bin   = nfacctd
