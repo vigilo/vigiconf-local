@@ -1,0 +1,1 @@
+vigiconf-local.rhel6.spec
