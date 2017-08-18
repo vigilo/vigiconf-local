@@ -7,6 +7,7 @@
 Commandes autorisées
 """
 
+from __future__ import print_function
 import os
 import shutil
 import subprocess
@@ -137,7 +138,7 @@ class ReceiveConf(Command):
         os.chdir(os.path.join(self.basedir, "new"))
         command = ["tar", "-pxf", self.archive]
         if self.debug:
-            print " ".join(command)
+            print(" ".join(command))
             return
         proc = subprocess.Popen(command, stdout=subprocess.PIPE,
                                          stderr=subprocess.STDOUT)
@@ -190,7 +191,7 @@ class ValidateConf(SubstitutedCommand):
                                         "name to validate"))
         script = self.valid_script + '.in'
         if not os.path.exists(script):
-            print _("No validation script: %s") % script
+            print(_("No validation script: %s") % script)
             return False
         return True
 
@@ -202,7 +203,7 @@ class ValidateConf(SubstitutedCommand):
         command = ["sh", self._substitute(self.valid_script),
                    self.basedir, self.location]
         if self.debug:
-            print " ".join(command)
+            print(" ".join(command))
             return
         proc = subprocess.Popen(command, stdout=subprocess.PIPE,
                                          stderr=subprocess.STDOUT)
@@ -237,8 +238,8 @@ class ActivateConf(Command):
         """Active la configuration"""
         self.check()
         if self.debug:
-            print _("Backing up the directory 'prod' to 'old', "
-                    "and renaming 'new' into 'prod'")
+            print(_("Backing up the directory 'prod' to 'old', "
+                    "and renaming 'new' into 'prod'"))
             return
         if not os.path.isdir(os.path.join(self.basedir, "prod")):
             os.makedirs(os.path.join(self.basedir, "prod"))
@@ -298,7 +299,7 @@ class StartStopApp(SubstitutedCommand):
         confdir = os.path.join(settings["vigiconf"].get("targetconfdir"),
                                self.subdir)
         if self.debug:
-            print "sh %s %s" % (self.get_script(), confdir)
+            print("sh %s %s" % (self.get_script(), confdir))
             return
         proc = subprocess.Popen(
             ["sh", self._substitute(self.get_script()), confdir],
@@ -359,8 +360,8 @@ class GetRevisions(Command):
         """Récupère et affiche les révisions"""
         self.check()
         if self.debug:
-            print _("Getting revisions from these directories: %s") % \
-                    ", ".join(self.dirs)
+            print(_("Getting revisions from these directories: %s") %
+                    ", ".join(self.dirs))
             return
         rev_re = re.compile("^\s*Revision: (\d+)\s*$")
         for d in self.dirs:
@@ -376,7 +377,7 @@ class GetRevisions(Command):
                     rev = rev_match.group(1)
             else:
                 rev = 0
-            print "%s %s" % (d, rev)
+            print("%s %s" % (d, rev))
 
 
 class SetRevision(Command):
@@ -399,7 +400,7 @@ class SetRevision(Command):
         """Écrit la révision"""
         self.check()
         if self.debug:
-            print _("Setting revision to: %s") % self.rev
+            print(_("Setting revision to: %s") % self.rev)
             return
         rev_file = open(os.path.join(self.basedir, "revisions.txt"), "w")
         rev_file.write("Revision: %s\n" % self.rev)

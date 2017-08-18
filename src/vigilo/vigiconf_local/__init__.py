@@ -10,6 +10,7 @@ Il est installé sur les serveur de supervision qui sont téléadministrés par
 VigiConf
 """
 
+from __future__ import print_function
 import sys
 import optparse
 import inspect
@@ -66,10 +67,10 @@ def main():
     try:
         cmd.run()
     except CommandPrereqError, e:
-        print >> sys.stderr, N_("Setup error: %s") % e
+        print(N_("Setup error: %s") % e, file=sys.stderr)
         sys.exit(11)
     except CommandExecError, e:
-        print >> sys.stderr, N_("Error: %s") % e
+        print(N_("Error: %s") % e, file=sys.stderr)
         sys.exit(10)
 
 
