@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: vigilo-vigiconf-local 2.0.0\n"
 "Report-Msgid-Bugs-To: contact.vigilo@c-s.fr\n"
 "POT-Creation-Date: 2010-09-30 15:29+0200\n"
-"PO-Revision-Date: 2012-07-18 17:58+0200\n"
+"PO-Revision-Date: 2017-08-24 12:17+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -19,72 +19,72 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.4\n"
 
-#: src/vigilo/vigiconf_local/__init__.py:46
+#: src/vigilo/vigiconf_local/__init__.py:33
 msgid "%prog [options] command [arguments]"
 msgstr "%prog [options] commande [arguments]"
 
-#: src/vigilo/vigiconf_local/__init__.py:48
+#: src/vigilo/vigiconf_local/__init__.py:35
 msgid "Only print the command that would be run"
 msgstr "Afficher les commandes qui seraient exécutées, sans les exécuter"
 
-#: src/vigilo/vigiconf_local/__init__.py:51
+#: src/vigilo/vigiconf_local/__init__.py:38
 #, python-format
 msgid "No command selected. Available commands: %s"
 msgstr "Pas de commande sélectionnée. Commandes disponibles : %s"
 
-#: src/vigilo/vigiconf_local/__init__.py:56
+#: src/vigilo/vigiconf_local/__init__.py:43
 #, python-format
 msgid "Unknown command. Available commands: %s"
 msgstr "Commande inconnue. Commandes disponibles : %s"
 
-#: src/vigilo/vigiconf_local/__init__.py:70
+#: src/vigilo/vigiconf_local/__init__.py:59
 #, python-format
 msgid "Wrong number of arguments. Expected: %s"
 msgstr "Nombre d'arguments incorrect. Attendu : %s"
 
-#: src/vigilo/vigiconf_local/__init__.py:81
+#: src/vigilo/vigiconf_local/__init__.py:70
 #, python-format
 msgid "Setup error: %s"
 msgstr "Erreur d'installation : %s"
 
-#: src/vigilo/vigiconf_local/__init__.py:84
+#: src/vigilo/vigiconf_local/__init__.py:73
 #, python-format
 msgid "Error: %s"
 msgstr "Erreur : %s"
 
-#: src/vigilo/vigiconf_local/commands.py:111
+#: src/vigilo/vigiconf_local/commands.py:129
 #, python-format
 msgid "The archive '%s' does not exist, copy it first"
 msgstr "L'archive '%s' n'existe pas, copiez la d'abord"
 
-#: src/vigilo/vigiconf_local/commands.py:130
+#: src/vigilo/vigiconf_local/commands.py:148
 #, python-format
 msgid "Can't untar the configuration: %(output)s"
 msgstr "Impossible d'extraire la configuration : %(output)s"
 
-#: src/vigilo/vigiconf_local/commands.py:172
+#: src/vigilo/vigiconf_local/commands.py:190
 msgid "Please specify an application name to validate"
 msgstr "Veuillez indiquer le nom de l'application à valider"
 
-#: src/vigilo/vigiconf_local/commands.py:175
+#: src/vigilo/vigiconf_local/commands.py:194
 #, python-format
 msgid "No validation script: %s"
 msgstr "Script de validation manquant : %s"
 
-#: src/vigilo/vigiconf_local/commands.py:192
+#: src/vigilo/vigiconf_local/commands.py:212
 #, python-format
 msgid "Validation failed for application '%(app)s'. Output: %(output)s"
 msgstr "Échec de la validation de l'application '%(app)s'. Sortie : %(output)s"
 
-#: src/vigilo/vigiconf_local/commands.py:214
+#: src/vigilo/vigiconf_local/commands.py:234
 msgid "The 'new' directory does not exist. Deploy the configuration first."
 msgstr "Le dossier 'new' n'existe pas. Déployez d'abord la configuration."
 
-#: src/vigilo/vigiconf_local/commands.py:221
+#: src/vigilo/vigiconf_local/commands.py:241
 msgid "Backing up the directory 'prod' to 'old', and renaming 'new' into 'prod'"
 msgstr "Sauvegarde du dossier 'prod' dans 'old' et renommage de 'new' en 'prod'"
 
-#: src/vigilo/vigiconf_local/commands.py:237
+#: src/vigilo/vigiconf_local/commands.py:257
 #, python-format
 msgid ""
 "Configuration activation failed: %(error)s. User '%(user)s' must have "
@@ -93,17 +93,17 @@ msgstr ""
 "L'activation de la configuration a échoué : %(error)s. L'utilisateur "
 "'%(user)s' doit avoir les droits en écriture sur '%(dir)s'."
 
-#: src/vigilo/vigiconf_local/commands.py:245
+#: src/vigilo/vigiconf_local/commands.py:265
 #, python-format
 msgid "Configuration activation failed: %s."
 msgstr "L'activation de la configuration a échoué : %s"
 
-#: src/vigilo/vigiconf_local/commands.py:269
+#: src/vigilo/vigiconf_local/commands.py:290
 #, python-format
 msgid "The script '%(script)s' does not exist for application '%(app)s'"
 msgstr "Le script '%(script)s' n'existe pas pour l'application '%(app)s'"
 
-#: src/vigilo/vigiconf_local/commands.py:288
+#: src/vigilo/vigiconf_local/commands.py:310
 #, python-format
 msgid ""
 "Action %(action)s failed for application %(app)s. Code: %(code)d. Output:"
@@ -112,21 +112,21 @@ msgstr ""
 "L'action %(action)s a échoué pour l'application %(app)s. Code : %(code)d."
 " Sortie : %(output)s"
 
-#: src/vigilo/vigiconf_local/commands.py:335
+#: src/vigilo/vigiconf_local/commands.py:357
 #, python-format
 msgid "The directory '%s' does not exist."
 msgstr "Le dossier '%s' n'existe pas."
 
-#: src/vigilo/vigiconf_local/commands.py:341
+#: src/vigilo/vigiconf_local/commands.py:363
 #, python-format
 msgid "Getting revisions from these directories: %s"
 msgstr "Récupération des révisions depuis ces dossiers : %s"
 
-#: src/vigilo/vigiconf_local/commands.py:375
+#: src/vigilo/vigiconf_local/commands.py:397
 msgid "The directory 'new' does not exist."
 msgstr "Le dossier 'new' n'existe pas."
 
-#: src/vigilo/vigiconf_local/commands.py:381
+#: src/vigilo/vigiconf_local/commands.py:403
 #, python-format
 msgid "Setting revision to: %s"
 msgstr "Positionnement de la révision à : %s"
