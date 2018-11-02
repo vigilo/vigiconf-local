@@ -39,7 +39,7 @@ def get_data_files():
 
 
 setup(name='vigilo-vigiconf-local',
-        version='5.0.0',
+        version='5.1.0dev',
         author='Vigilo Team',
         author_email='contact.vigilo@c-s.fr',
         url='https://www.vigilo-nms.com/',
