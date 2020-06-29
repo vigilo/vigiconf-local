@@ -1,6 +1,6 @@
 # vim:set expandtab tabstop=4 shiftwidth=4:
 # -*- coding: utf-8 -*-
-# Copyright (C) 2010-2020 CS-SI
+# Copyright (C) 2010-2020 CS GROUP – France
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """
