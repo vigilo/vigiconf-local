@@ -1,5 +1,0 @@
-# -*- python -*-
-
-from Config import addFilter
-
-addFilter("W: dangerous-command-in-%post chown")
