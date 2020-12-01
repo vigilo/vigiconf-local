@@ -1,8 +1,8 @@
 [vigiconf]
-targetconfdir = @SYSCONFDIR@/vigilo/vigiconf
+targetconfdir = @sysconfdir@/vigilo/vigiconf
 
-httpd_bin     = @HTTPD_BIN@
-nagios_bin    = @NAGIOS_BIN@
+httpd_bin     = @httpd-bin@
+nagios_bin    = @nagios-bin@
 nfacctd_bin   = nfacctd
 snmpd_bin     = snmpd
 snmptt_bin    = snmptt
@@ -16,7 +16,7 @@ nfacctd_svc   = nfacctd
 
 nagios_svc    = nagios
 nagios_user   = nagios
-nagios_cfg    = @NCONFDIR@/nagios.cfg
+nagios_cfg    = @nagiosconfdir@/nagios.cfg
 
 #
 # LOGGING

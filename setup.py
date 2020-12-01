@@ -6,20 +6,7 @@
 import os, sys
 from setuptools import setup, find_packages
 
-cmdclass = {}
-try:
-    from vigilo.common.commands import install_data
-except ImportError:
-    pass
-else:
-    cmdclass['install_data'] = install_data
-
-os.environ.setdefault('SYSCONFDIR', '/etc')
-os.environ.setdefault('LOCALSTATEDIR', '/var')
-os.environ.setdefault('HTTPD_BIN', 'httpd')
-os.environ.setdefault('NAGIOS_BIN', 'nagios')
-os.environ.setdefault('NCONFDIR',
-    os.path.join(os.environ['SYSCONFDIR'], 'nagios'))
+setup_requires = ['vigilo-common'] if not os.environ.get('CI') else []
 
 tests_require = [
     'nose',
@@ -44,10 +31,10 @@ def install_i18n(i18ndir, destdir):
 def get_data_files():
     files = []
     for d in ["new", "prod", "tmp", "old"]:
-        files.append((os.path.join("@SYSCONFDIR@", "vigilo", "vigiconf", d), []))
-    files.append((os.path.join("@SYSCONFDIR@", "vigilo", "vigiconf"),
+        files.append((os.path.join("@sysconfdir@", "vigilo", "vigiconf", d), []))
+    files.append((os.path.join("@sysconfdir@", "vigilo", "vigiconf"),
         ["settings-local.ini.in"]))
-    files.append((os.path.join("@LOCALSTATEDIR@", "lib", "vigilo", "vigiconf"), []))
+    files.append((os.path.join("@localstatedir@", "lib", "vigilo", "vigiconf"), []))
     return files
 
 
@@ -60,6 +47,7 @@ setup(name='vigilo-vigiconf-local',
         description="Local client for VigiConf",
         long_description="This program installs the configuration pushed "
                          "by VigiConf.",
+        setup_requires=setup_requires,
         install_requires=[
             "setuptools",
             "vigilo-common",
@@ -83,7 +71,28 @@ setup(name='vigilo-vigiconf-local',
             },
         package_dir={'': 'src'},
         test_suite='nose.collector',
-        cmdclass=cmdclass,
+        vigilo_build_vars={
+            'httpd-bin': {
+                'default': 'httpd',
+                'description': "name of the 'httpd' binary",
+            },
+            'nagios-bin': {
+                'default': 'nagios',
+                'description': "name of the 'nagios' binary",
+            },
+            'sysconfdir': {
+                'default': '/etc',
+                'description': "installation directory for configuration files",
+            },
+            'localstatedir': {
+                'default': '/var',
+                'description': "local state directory",
+            },
+            'nagiosconfdir': {
+                'default': '/etc/nagios',
+                'description': "path to Nagios' configuration directory",
+            },
+        },
         data_files=get_data_files() +
             install_i18n("i18n", os.path.join(sys.prefix, 'share', 'locale')),
         )
